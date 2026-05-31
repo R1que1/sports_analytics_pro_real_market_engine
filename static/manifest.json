@@ -1,0 +1,9 @@
+{
+  "name": "Sports Analytics Pro",
+  "short_name": "SportsPro",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05050b",
+  "theme_color": "#8b2cff",
+  "icons": []
+}

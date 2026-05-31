@@ -1,0 +1,12 @@
+App Mobile / PWA
+
+Opção 1: PWA
+- Criar manifest.json
+- Criar service worker
+- Adicionar install prompt
+
+Opção 2: Capacitor
+- Criar wrapper mobile e apontar para o domínio do SaaS.
+
+Opção 3: Flutter/React Native
+- Consumir endpoints /api/v1/* e WebSocket.

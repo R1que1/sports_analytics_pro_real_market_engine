@@ -1,0 +1,562 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sports Analytics Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="logo center">
+      <div class="shield"><i class="fa-solid fa-shield-halved"></i></div>
+      <div><h1>SPORTS</h1><span>ANALYTICS PRO</span></div>
+    </div>
+    <h2>Entrar na plataforma</h2>
+    <p class="subtitle">Acesso VIP/Premium com IA, alertas e jogos ao vivo.</p>
+
+    <label>Email</label>
+    <input id="loginEmail" class="input" value="vip@sportspro.com">
+    <label>Senha</label>
+    <input id="loginPassword" class="input" type="password" value="vip123">
+
+    <button class="btn" onclick="login()">Entrar</button>
+    <button class="btn ghost" onclick="loginAdmin()">Entrar como Admin</button>
+
+    <p id="loginMsg" class="msg"></p>
+    <p class="muted small">Teste usuário: vip@sportspro.com / vip123<br>Admin: admin@sportspro.com / admin123</p>
+  </div>
+</div>
+
+<button class="mobile-menu" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+
+<div class="app" id="app" style="display:none">
+  <aside id="sidebar">
+    <div class="logo">
+      <div class="shield"><i class="fa-solid fa-shield-halved"></i></div>
+      <div><h1>SPORTS</h1><span>ANALYTICS PRO</span></div>
+    </div>
+
+    <nav>
+      <a class="active" data-page="dashboard"><i class="fa-solid fa-house"></i> Dashboard</a>
+      <a data-page="jogos"><i class="fa-regular fa-futbol"></i> Jogos ao Vivo</a>
+      <a data-page="previsoes"><i class="fa-solid fa-brain"></i> Previsões IA</a>
+      <a data-page="estatisticas"><i class="fa-solid fa-chart-line"></i> Estatísticas</a>
+      <a data-page="mercados"><i class="fa-solid fa-crosshairs"></i> Mercados</a>
+      <a data-page="alertas"><i class="fa-regular fa-bell"></i> Alertas</a>
+      <a data-page="radar"><i class="fa-solid fa-bolt"></i> Ultra Radar</a>
+      <a data-page="aprendizado"><i class="fa-solid fa-robot"></i> ML Histórico</a>
+      <a data-page="favoritos"><i class="fa-regular fa-star"></i> Favoritos</a>
+      <a data-page="avancado"><i class="fa-solid fa-database"></i> Stats Avançadas</a>
+      <a data-page="odds"><i class="fa-solid fa-coins"></i> Odds Reais</a>
+      <a data-page="placar"><i class="fa-solid fa-calculator"></i> Simulador</a>
+      <a data-page="heatmap"><i class="fa-solid fa-fire"></i> Heatmap</a>
+      <a data-page="financeiro"><i class="fa-solid fa-chart-pie"></i> Financeiro</a>
+      <a data-page="realtime"><i class="fa-solid fa-satellite-dish"></i> Realtime</a>
+      <a data-page="stake"><i class="fa-solid fa-scale-balanced"></i> Stake Pro</a>
+      <a data-page="entradas"><i class="fa-solid fa-list-check"></i> Entradas</a>
+      <a data-page="treino"><i class="fa-solid fa-microchip"></i> Treino Contínuo</a>
+      <a data-page="telegram"><i class="fa-brands fa-telegram"></i> Telegram Bot</a>
+      <a data-page="realEngine"><i class="fa-solid fa-tower-broadcast"></i> Real Engine</a>
+      <a data-page="arbitragem"><i class="fa-solid fa-shuffle"></i> Arbitragem</a>
+      <a data-page="assinaturaAuto"><i class="fa-solid fa-repeat"></i> Assinatura Auto</a>
+      <a data-page="ocrOdds"><i class="fa-solid fa-camera"></i> OCR Odds</a>
+      <a data-page="deployReal"><i class="fa-solid fa-globe"></i> Deploy Real</a>
+      <a data-page="cloudPro"><i class="fa-solid fa-cloud"></i> Cloud Pro</a>
+      <a data-page="jwtAuth"><i class="fa-solid fa-key"></i> JWT Auth</a>
+      <a data-page="mlReal"><i class="fa-solid fa-brain"></i> ML Real</a>
+      <a data-page="pushReal"><i class="fa-solid fa-bell"></i> Push Real</a>
+      <a data-page="mobileApp"><i class="fa-solid fa-mobile-screen"></i> App Mobile</a>
+      <a data-page="apiSistema"><i class="fa-solid fa-code"></i> API Sistema</a>
+      <a data-page="deploy"><i class="fa-solid fa-cloud-arrow-up"></i> Deploy</a>
+      <a data-page="premium"><i class="fa-solid fa-crown"></i> Sistema VIP</a>
+      <a data-page="admin" id="adminMenu" style="display:none"><i class="fa-solid fa-user-shield"></i> Painel Admin</a>
+      <a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+    </nav>
+
+    <div class="upgrade">
+      <p>Upgrade para</p>
+      <h3>PREMIUM</h3>
+      <p><i class="fa-solid fa-rocket"></i> Mais previsões</p>
+      <p><i class="fa-solid fa-rocket"></i> Estatísticas avançadas</p>
+      <p><i class="fa-solid fa-rocket"></i> Alertas inteligentes</p>
+      <p><i class="fa-solid fa-rocket"></i> Painel exclusivo</p>
+      <button class="btn" onclick="goPage('premium')">Upgrade agora</button>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <div class="top-left">
+        <i class="fa-solid fa-bars hamb" onclick="toggleMenu()"></i>
+        <p>Bem-vindo, <b id="userName">Infinite Trader</b> <span class="vip" id="userPlan">VIP</span></p>
+      </div>
+      <div class="top-icons">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <i class="fa-regular fa-bell"></i>
+        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </header>
+
+    <section id="dashboard" class="page active">
+      <div class="grid">
+        <div class="card">
+          <div class="card-title"><h2><i class="fa-solid fa-radio"></i> Jogos ao Vivo</h2><span class="pill" id="liveCount">AO VIVO</span></div>
+          <div class="tabs"><span class="on">Todos</span><span>Futebol</span><span>Basquete</span><span>Tênis</span><span>eSports</span></div>
+          <div id="livePreview"></div>
+          <a class="link" onclick="goPage('jogos')">Ver todos os jogos ao vivo →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><h2><i class="fa-solid fa-brain"></i> Previsões IA</h2><span class="pill"><span class="green">●</span> IA ATIVA</span></div>
+          <div class="tabs"><span class="on">Hoje</span><span>Amanhã</span><span>7 Dias</span><span>Personalizar</span></div>
+          <table>
+            <thead><tr><th>JOGO</th><th>MERCADO</th><th>PREVISÃO</th><th>CONFIANÇA</th><th>ODD</th><th></th></tr></thead>
+            <tbody id="predTable"></tbody>
+          </table>
+          <div class="mini-stats">
+            <div><small>PRECISÃO IA</small><h3 id="accuracy">98.6%</h3><span class="up">▲ 2.4%</span></div>
+            <div><small>LUCRO TOTAL</small><h3 id="profit">+24.8%</h3><span class="up">▲ 5.7%</span></div>
+            <div><small>OPERAÇÕES</small><h3 id="operations">237</h3><span class="up">▲ 18</span></div>
+            <div><small>ROI MÉDIO</small><h3 id="roi">+8.7%</h3><span class="up">▲ 1.3%</span></div>
+          </div>
+          <a class="link" onclick="goPage('previsoes')">Ver todas as previsões →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><h2>Desempenho da IA</h2><span class="pill">7 dias</span></div>
+          <div class="side-metrics">
+            <div>
+              <div class="metric-box"><small>Lucro</small><h3 id="profit2">+24.8%</h3><span class="up">▲ 5.7% vs 7 dias</span></div>
+              <div class="metric-box"><small>ROI Médio</small><h3 id="roi2">+8.7%</h3><span class="up">▲ 1.3% vs 7 dias</span></div>
+            </div>
+            <div class="chart"><canvas id="iaChart"></canvas></div>
+          </div>
+          <div class="card mini-card"><h2>Confiança Média</h2><h3 class="big">92.7%</h3><div class="progress"><div style="width:82%"></div></div></div>
+          <div class="card mini-card"><h2>Distribuição de Previsões</h2><div class="donut-wrap"><div class="donut"></div><div><p>Vitória Casa 45%</p><br><p>Empate 25%</p><br><p>Vitória Fora 20%</p><br><p>Mais de 2.5 gols 10%</p></div></div></div>
+        </div>
+      </div>
+
+      <div class="grid-bottom">
+        <div class="card"><div class="card-title"><h2>Estatísticas Rápidas</h2><span class="pill">Premier League</span></div><div class="quick-grid"><div class="quick"><small>GOLS POR JOGO</small><h3 id="goals">2.85</h3><span class="up">▲ 12%</span></div><div class="quick"><small>CARTÕES AMARELOS</small><h3 id="cards">3.45</h3><span class="red">▼ 8%</span></div><div class="quick"><small>ESCANTEIOS POR JOGO</small><h3 id="corners">10.2</h3><span class="up">▲ 15%</span></div><div class="quick"><small>POSSE DE BOLA</small><h3 id="possession">54.6%</h3><span class="up">▲ 7%</span></div></div></div>
+        <div class="card"><div class="card-title"><h2>Top Times</h2><span class="pill">Por desempenho</span></div><div class="row"><span>1 Manchester City</span><b>89 PTS</b></div><div class="row"><span>2 Arsenal</span><b>86 PTS</b></div><div class="row"><span>3 Liverpool</span><b>84 PTS</b></div><div class="row"><span>4 Aston Villa</span><b>68 PTS</b></div><div class="row"><span>5 Tottenham</span><b>63 PTS</b></div></div>
+        <div class="card"><div class="card-title"><h2>Mercados Populares</h2></div><div class="row"><span>1X2</span><span class="muted">97%</span></div><div class="row"><span>Ambos Marcam</span><span class="muted">93%</span></div><div class="row"><span>Mais de 2.5 Gols</span><span class="muted">91%</span></div><div class="row"><span>Dupla Chance</span><span class="muted">88%</span></div></div>
+        <div class="card"><div class="card-title"><h2>Alertas Inteligentes</h2></div><div id="alertsPreview"></div><a class="link" onclick="goPage('alertas')">Ver todos os alertas →</a></div>
+      </div>
+    </section>
+
+    <section id="jogos" class="page">
+      <h1 class="hero-title">Jogos ao Vivo Reais</h1><p class="subtitle">Usa API-Football quando você colocar sua chave. Sem chave, usa modo demo premium.</p>
+      <div class="card"><button class="btn small-btn" onclick="loadLive()">Atualizar jogos</button><br><br><div id="allGames" class="three"></div></div>
+    </section>
+
+    <section id="previsoes" class="page">
+      <h1 class="hero-title">Previsões IA Dinâmica</h1><p class="subtitle">IA heurística com probabilidade, confiança, mercados e justificativa.</p>
+      <div class="two">
+        <div class="card">
+          <div class="card-title"><h2>Nova Análise</h2><span class="pill">IA 2.0</span></div>
+          <div class="form-grid">
+            <div><label>Time da casa</label><input id="homeTeam" class="input" value="Manchester City"></div>
+            <div><label>Time visitante</label><input id="awayTeam" class="input" value="Real Madrid"></div>
+          </div>
+          <button class="btn" onclick="gerarPrevisao()">Gerar previsão IA</button>
+        </div>
+        <div class="card" id="resultadoIA">
+          <div class="card-title"><h2>Resultado IA</h2><span class="pill green">AGUARDANDO</span></div>
+          <p class="muted">Escolha os times e clique em gerar previsão.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="estatisticas" class="page">
+      <h1 class="hero-title">Gráficos Reais</h1><p class="subtitle">Gráficos dinâmicos puxados do backend.</p>
+      <div class="two">
+        <div class="card"><h2>Evolução da IA</h2><div class="chart large"><canvas id="statsChart"></canvas></div></div>
+        <div class="card"><h2>Distribuição</h2><div class="chart large"><canvas id="pieChart"></canvas></div></div>
+      </div>
+    </section>
+
+    <section id="mercados" class="page">
+      <h1 class="hero-title">Mercados</h1><p class="subtitle">Mercados populares e sinais de alta confiança.</p>
+      <div class="card">
+        <div class="row"><b>1X2</b><span class="confidence">97%</span></div>
+        <div class="row"><b>Ambos Marcam</b><span class="confidence">93%</span></div>
+        <div class="row"><b>Mais de 2.5 gols</b><span class="confidence">91%</span></div>
+        <div class="row"><b>Dupla Chance</b><span class="confidence">88%</span></div>
+      </div>
+    </section>
+
+    <section id="alertas" class="page">
+      <h1 class="hero-title">Notificações ao Vivo</h1><p class="subtitle">Alertas inteligentes salvos no banco de dados.</p>
+      <div class="card" id="alertsList"></div>
+    </section>
+
+
+    <section id="radar" class="page">
+      <h1 class="hero-title">Ultra Radar de Oportunidades</h1>
+      <p class="subtitle">Score de valor da odd, detecção de zebras, heat de gols e risco da entrada.</p>
+      <div class="card">
+        <button class="btn small-btn" onclick="loadRadar()">Atualizar Radar</button>
+        <button class="btn small-btn" onclick="gerarPushAlerts()">Gerar Alertas IA</button>
+        <br><br>
+        <div id="radarList"></div>
+      </div>
+    </section>
+
+    <section id="aprendizado" class="page">
+      <h1 class="hero-title">Machine Learning com Histórico</h1>
+      <p class="subtitle">A IA lê previsões geradas, calcula padrões e melhora regras internas.</p>
+      <div class="two">
+        <div class="card">
+          <div class="card-title"><h2>Treinar IA</h2><span class="pill">Local</span></div>
+          <p class="muted">Quanto mais previsões você gerar, mais histórico a IA terá para criar regras.</p>
+          <button class="btn" onclick="loadML()">Analisar histórico</button>
+        </div>
+        <div class="card" id="mlResult">
+          <h2>Aguardando análise</h2>
+          <p class="muted">Clique em analisar histórico.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="favoritos" class="page">
+      <h1 class="hero-title">Favoritos Inteligentes</h1>
+      <p class="subtitle">Entradas salvas pelo usuário com confiança e mercado.</p>
+      <div class="card">
+        <button class="btn small-btn" onclick="loadFavorites()">Carregar favoritos</button>
+        <br><br>
+        <div id="favList"></div>
+      </div>
+    </section>
+
+
+    <section id="avancado" class="page">
+      <h1 class="hero-title">API-Football Avançada</h1>
+      <p class="subtitle">xG, chutes no gol, escanteios, cartões, lesões, forma e pressão ofensiva.</p>
+      <div class="two">
+        <div class="card">
+          <label>Time</label>
+          <input id="advTeam" class="input" value="Manchester City">
+          <button class="btn" onclick="loadAdvancedStats()">Buscar estatísticas</button>
+        </div>
+        <div class="card" id="advancedStatsBox"><p class="muted">Busque um time.</p></div>
+      </div>
+    </section>
+
+    <section id="odds" class="page">
+      <h1 class="hero-title">Odds Reais / Value Bet</h1>
+      <p class="subtitle">Estrutura pronta para plugar odds reais. Calcula odd justa e valor.</p>
+      <div class="card">
+        <button class="btn small-btn" onclick="loadOdds()">Atualizar Odds</button>
+        <br><br>
+        <div id="oddsBox"></div>
+      </div>
+    </section>
+
+    <section id="placar" class="page">
+      <h1 class="hero-title">Simulador de Placar</h1>
+      <p class="subtitle">Cenários conservador, provável, agressivo e zebra.</p>
+      <div class="two">
+        <div class="card">
+          <div class="form-grid">
+            <div><label>Casa</label><input id="scoreHome" class="input" value="Manchester City"></div>
+            <div><label>Fora</label><input id="scoreAway" class="input" value="Real Madrid"></div>
+          </div>
+          <button class="btn" onclick="simulateScore()">Simular placar</button>
+        </div>
+        <div class="card" id="scoreBox"><p class="muted">Aguardando simulação.</p></div>
+      </div>
+    </section>
+
+    <section id="heatmap" class="page">
+      <h1 class="hero-title">Heatmap de Pressão</h1>
+      <p class="subtitle">Mapa visual de pressão ofensiva e zonas perigosas.</p>
+      <div class="card">
+        <button class="btn small-btn" onclick="loadHeatmap()">Gerar Heatmap</button>
+        <br><br>
+        <div id="heatmapBox" class="heatmap-grid"></div>
+      </div>
+    </section>
+
+    <section id="financeiro" class="page">
+      <h1 class="hero-title">Dashboard Financeiro</h1>
+      <p class="subtitle">Histórico de lucro, perdas, ROI e entradas.</p>
+      <div class="two">
+        <div class="card" id="financialSummary"></div>
+        <div class="card"><div class="chart large"><canvas id="financialChart"></canvas></div></div>
+      </div>
+      <br>
+      <div class="card" id="financialHistory"></div>
+    </section>
+
+
+    <section id="realtime" class="page">
+      <h1 class="hero-title">WebSocket Tempo Real</h1>
+      <p class="subtitle">Atualização ao vivo de eventos, pressão, momentum, gols e alertas sem recarregar.</p>
+      <div class="two">
+        <div class="card">
+          <div class="card-title"><h2>Status Realtime</h2><span class="pill" id="wsStatus">Conectando</span></div>
+          <button class="btn small-btn" onclick="requestLiveTick()">Puxar evento agora</button>
+          <br><br>
+          <div id="liveEventBox"></div>
+        </div>
+        <div class="card">
+          <h2>Feed ao vivo</h2>
+          <br>
+          <div id="liveFeed"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stake" class="page">
+      <h1 class="hero-title">Stake Inteligente / Kelly</h1>
+      <p class="subtitle">Calculadora profissional de stake com Kelly Criterion fracionado.</p>
+      <div class="two">
+        <div class="card">
+          <label>Banca</label><input id="bankroll" class="input" value="1000">
+          <label>Probabilidade IA (%)</label><input id="stakeProb" class="input" value="62">
+          <label>Odd</label><input id="stakeOdd" class="input" value="1.80">
+          <button class="btn" onclick="calcStake()">Calcular stake</button>
+        </div>
+        <div class="card" id="stakeResult"><p class="muted">Preencha e calcule.</p></div>
+      </div>
+    </section>
+
+    <section id="entradas" class="page">
+      <h1 class="hero-title">Histórico de Entradas</h1>
+      <p class="subtitle">Salve entradas, feche como win/loss e acompanhe lucro.</p>
+      <div class="card">
+        <button class="btn small-btn" onclick="quickSaveEntry()">Salvar entrada demo</button>
+        <button class="btn small-btn" onclick="loadEntries()">Atualizar histórico</button>
+        <br><br>
+        <div id="entriesBox"></div>
+      </div>
+    </section>
+
+    <section id="treino" class="page">
+      <h1 class="hero-title">Treino Contínuo da IA</h1>
+      <p class="subtitle">Motor preparado para aprender com previsões, entradas e resultados reais.</p>
+      <div class="two">
+        <div class="card">
+          <p class="muted">Gere previsões e salve entradas para aumentar a base de treino.</p>
+          <button class="btn" onclick="trainContinuous()">Treinar agora</button>
+        </div>
+        <div class="card" id="trainingBox"><p class="muted">Aguardando treino.</p></div>
+      </div>
+    </section>
+
+    <section id="telegram" class="page">
+      <h1 class="hero-title">Telegram Bot</h1>
+      <p class="subtitle">Envio de sinais e alertas. Sem token, roda em modo demo.</p>
+      <div class="two">
+        <div class="card">
+          <label>Mensagem</label>
+          <input id="telegramMsg" class="input" value="🔥 Alerta Sports Analytics Pro: Value bet detectada com 88% de confiança.">
+          <button class="btn" onclick="sendTelegram()">Enviar alerta</button>
+        </div>
+        <div class="card" id="telegramBox"><p class="muted">Aguardando envio.</p></div>
+      </div>
+    </section>
+
+    <section id="apiSistema" class="page">
+      <h1 class="hero-title">API Própria do Sistema</h1>
+      <p class="subtitle">Endpoints internos prontos para app mobile, painel externo ou integrações.</p>
+      <div class="two">
+        <div class="card" id="healthBox"></div>
+        <div class="card">
+          <h2>Endpoints</h2><br>
+          <div class="row"><span>/api/v1/predictions</span><b class="pill">GET</b></div>
+          <div class="row"><span>/api/elite-analysis</span><b class="pill">POST</b></div>
+          <div class="row"><span>/api/ultra-radar</span><b class="pill">GET</b></div>
+          <div class="row"><span>/api/realtime-tick</span><b class="pill">GET</b></div>
+          <div class="row"><span>/api/stake</span><b class="pill">POST</b></div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section id="realEngine" class="page">
+      <h1 class="hero-title">Real Market Engine</h1>
+      <p class="subtitle">Odds premium, API-Football real, análise de mercado em tempo real e engine de alertas.</p>
+      <div class="two">
+        <div class="card">
+          <div class="card-title"><h2>Odds Premium</h2><span class="pill">API-Football</span></div>
+          <button class="btn small-btn" onclick="loadRealOddsPremium()">Buscar Odds Reais</button>
+          <button class="btn small-btn" onclick="runPremiumAlerts()">Rodar Alertas</button>
+          <br><br>
+          <div id="realOddsBox"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><h2>Mercado Realtime</h2><span class="pill">Live</span></div>
+          <button class="btn small-btn" onclick="loadMarketRealtime()">Atualizar Mercado</button>
+          <br><br>
+          <div id="marketRealtimeBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="arbitragem" class="page">
+      <h1 class="hero-title">Scanner de Arbitragem</h1>
+      <p class="subtitle">Compara odds entre casas para detectar diferença positiva e oportunidades.</p>
+      <div class="card">
+        <button class="btn small-btn" onclick="runArbitrage()">Escanear Arbitragem</button>
+        <br><br>
+        <div id="arbitrageBox"></div>
+      </div>
+    </section>
+
+    <section id="assinaturaAuto" class="page">
+      <h1 class="hero-title">Assinatura Recorrente Automática</h1>
+      <p class="subtitle">Estrutura Mercado Pago recorrente. Sem token/webhook público, roda em modo demo.</p>
+      <div class="two">
+        <div class="card">
+          <h2>VIP PREMIUM</h2>
+          <h1 class="purple-text">R$ 79,90/mês</h1>
+          <button class="btn" onclick="createRecurringSubscription()">Criar assinatura</button>
+        </div>
+        <div class="card" id="subscriptionBox"><p class="muted">Aguardando assinatura.</p></div>
+      </div>
+    </section>
+
+    <section id="ocrOdds" class="page">
+      <h1 class="hero-title">OCR de Odds ao Vivo</h1>
+      <p class="subtitle">Cole texto de prints/odds para a IA extrair odds. Pronto para evoluir com Tesseract OCR.</p>
+      <div class="two">
+        <div class="card">
+          <label>Texto com odds</label>
+          <textarea id="ocrText" class="input" style="min-height:160px">Man City 1.72 Empate 3.80 Real Madrid 4.60 Over 2.5 2.05 BTTS Sim 1.68</textarea>
+          <button class="btn" onclick="runOcrOdds()">Extrair odds</button>
+        </div>
+        <div class="card" id="ocrBox"><p class="muted">Aguardando OCR.</p></div>
+      </div>
+    </section>
+
+    <section id="deployReal" class="page">
+      <h1 class="hero-title">Deploy 24h / Domínio / App Oficial</h1>
+      <p class="subtitle">Checklist real para colocar online, configurar domínio e preparar Android/iPhone.</p>
+      <div class="two">
+        <div class="card">
+          <div class="card-title"><h2>Deploy 24h</h2><span class="pill">Cloud</span></div>
+          <button class="btn small-btn" onclick="loadDeployReal()">Ver checklist</button>
+          <br><br>
+          <div id="deployRealBox"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><h2>Mobile Oficial</h2><span class="pill">Android/iOS</span></div>
+          <button class="btn small-btn" onclick="loadMobileBuildGuide()">Ver guia</button>
+          <br><br>
+          <div id="mobileBuildBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cloudPro" class="page">
+      <h1 class="hero-title">Cloud Pro / PostgreSQL / Odds</h1>
+      <p class="subtitle">Preparado para banco PostgreSQL real, odds plugáveis, domínio, deploy online e multiusuário.</p>
+      <div class="two">
+        <div class="card">
+          <div class="card-title"><h2>Status Cloud</h2><span class="pill">PRO</span></div>
+          <button class="btn small-btn" onclick="loadCloudHealth()">Verificar Cloud</button>
+          <br><br>
+          <div id="cloudHealthBox"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><h2>Odds das Casas</h2><span class="pill">Plugável</span></div>
+          <button class="btn small-btn" onclick="loadBookmakerOdds()">Atualizar Odds</button>
+          <br><br>
+          <div id="bookmakerOddsBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="jwtAuth" class="page">
+      <h1 class="hero-title">Autenticação JWT</h1>
+      <p class="subtitle">Login por token para app mobile, API externa e multiusuário online.</p>
+      <div class="two">
+        <div class="card">
+          <label>Email</label><input id="jwtEmail" class="input" value="vip@sportspro.com">
+          <label>Senha</label><input id="jwtPassword" class="input" type="password" value="vip123">
+          <button class="btn" onclick="jwtLogin()">Gerar Token JWT</button>
+        </div>
+        <div class="card" id="jwtBox"><p class="muted">Aguardando token.</p></div>
+      </div>
+    </section>
+
+    <section id="mlReal" class="page">
+      <h1 class="hero-title">Machine Learning Real com Dataset</h1>
+      <p class="subtitle">Treino real com RandomForest usando CSV local em data/matches_dataset.csv.</p>
+      <div class="two">
+        <div class="card">
+          <button class="btn" onclick="trainRealML()">Treinar ML Real</button>
+          <br><br>
+          <div id="mlRealBox"><p class="muted">Aguardando treino.</p></div>
+        </div>
+        <div class="card">
+          <h2>Previsão ML</h2><br>
+          <button class="btn small-btn" onclick="predictRealML()">Rodar previsão exemplo</button>
+          <br><br>
+          <div id="mlPredictBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pushReal" class="page">
+      <h1 class="hero-title">Notificações Push Reais</h1>
+      <p class="subtitle">Estrutura pronta para VAPID keys, service worker e subscriptions.</p>
+      <div class="two">
+        <div class="card">
+          <label>Título</label><input id="pushTitle" class="input" value="Sports Analytics Pro">
+          <label>Mensagem</label><input id="pushBody" class="input" value="🔥 Value bet detectada com 88% de confiança.">
+          <button class="btn" onclick="sendPushDemo()">Enviar Push</button>
+        </div>
+        <div class="card" id="pushBox"><p class="muted">Aguardando envio.</p></div>
+      </div>
+    </section>
+
+    <section id="mobileApp" class="page">
+      <h1 class="hero-title">App Mobile Oficial</h1>
+      <p class="subtitle">Base pronta para PWA, Capacitor, Flutter ou React Native consumindo sua API.</p>
+      <div class="card">
+        <div class="row"><span>PWA</span><b class="pill">Pronto para service worker</b></div>
+        <div class="row"><span>Capacitor</span><b class="pill">WebView do SaaS</b></div>
+        <div class="row"><span>Flutter/React Native</span><b class="pill">Consumir /api/v1</b></div>
+        <div class="row"><span>JWT</span><b class="pill">Login mobile</b></div>
+        <div class="row"><span>Push</span><b class="pill">VAPID/Firebase-ready</b></div>
+      </div>
+    </section>
+
+    <section id="deploy" class="page">
+      <h1 class="hero-title">Deploy Online / Mobile</h1>
+      <p class="subtitle">Checklist para colocar online 24h, domínio próprio e app mobile/PWA.</p>
+      <div class="card" id="deployBox"></div>
+    </section>
+
+    <section id="premium" class="page">
+      <h1 class="hero-title">Sistema VIP / Premium</h1><p class="subtitle">Estrutura pronta para planos VIP e VIP PREMIUM.</p>
+      <div class="two">
+        <div class="card plan"><h2>VIP</h2><h1>R$ 29,90</h1><p>Previsões básicas, dashboard e jogos ao vivo.</p><button class="btn">Plano atual</button></div>
+        <div class="card plan premium"><h2>VIP PREMIUM</h2><h1>R$ 79,90</h1><p>IA avançada, alertas, admin, sinais premium e estatísticas completas.</p><button class="btn" onclick="createPix()">Gerar PIX Premium</button><div id="pixBox"></div></div>
+      </div>
+    </section>
+
+    <section id="admin" class="page">
+      <h1 class="hero-title">Painel Admin</h1><p class="subtitle">Controle de usuários, planos e status da plataforma.</p>
+      <div class="card">
+        <button class="btn small-btn" onclick="loadAdmin()">Carregar usuários</button>
+        <br><br>
+        <div id="adminUsers"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

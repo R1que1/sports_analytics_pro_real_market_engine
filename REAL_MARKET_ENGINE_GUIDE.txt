@@ -1,0 +1,38 @@
+
+Sports Analytics Pro - Real Market Engine
+
+IMPORTANTE:
+Não deixe chaves fixas no código. Use variáveis de ambiente.
+
+API-Football:
+PowerShell:
+$env:API_FOOTBALL_KEY="SUA_CHAVE"
+python app.py
+
+Odds premium:
+- A rota /api/real/odds-premium tenta usar API-Football /odds.
+- Se sua conta/plano não liberar odds, o sistema cai em demo-premium.
+
+Mercado Pago assinatura recorrente:
+$env:MERCADO_PAGO_TOKEN="SEU_TOKEN"
+python app.py
+
+Telegram:
+$env:TELEGRAM_BOT_TOKEN="SEU_TOKEN"
+$env:TELEGRAM_CHAT_ID="SEU_CHAT_ID"
+
+Deploy 24h:
+- Subir no GitHub.
+- Criar conta Render/Railway/VPS.
+- Criar PostgreSQL.
+- Configurar variáveis no painel.
+- Ativar domínio e HTTPS.
+- Configurar webhook público Mercado Pago.
+
+Mobile:
+- PWA: já tem manifest/sw.
+- Android/iOS oficial: usar Capacitor apontando para domínio final.
+
+OCR real:
+- Para imagem real, instalar Tesseract OCR no Windows e usar pytesseract.
+- Esta versão já extrai odds de texto colado.

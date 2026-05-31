@@ -1,0 +1,42 @@
+
+Sports Analytics Pro Cloud Pro - Deploy
+
+1. Criar PostgreSQL:
+- Render PostgreSQL, Railway PostgreSQL ou Supabase.
+- Copiar DATABASE_URL.
+
+2. Configurar variáveis:
+SECRET_KEY
+JWT_SECRET
+DATABASE_URL
+API_FOOTBALL_KEY
+ODDS_API_KEY
+MERCADO_PAGO_TOKEN
+TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
+PUSH_PUBLIC_KEY
+PUSH_PRIVATE_KEY
+
+3. Inicializar banco cloud:
+python cloud_models.py
+
+4. Rodar local:
+python -m pip install -r requirements.txt
+python app.py
+
+5. Treinar ML:
+python ml_train_real.py
+
+6. Deploy:
+- Render/Railway/VPS.
+- Procfile já incluído.
+- Para produção, usar PostgreSQL e SECRET_KEY forte.
+
+7. Domínio:
+- Comprar domínio.
+- Apontar DNS para o serviço de deploy.
+- Ativar HTTPS.
+
+8. Mobile:
+- Usar PWA com manifest/sw.
+- Ou criar app com Capacitor apontando para o domínio.

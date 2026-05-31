@@ -1,0 +1,17 @@
+Sports Analytics Pro - API Própria
+
+GET /api/system-health
+GET /api/v1/predictions
+POST /api/elite-analysis
+GET /api/ultra-radar
+GET /api/realtime-tick
+POST /api/stake
+POST /api/save-entry
+GET /api/entries
+POST /api/close-entry
+GET /api/train-continuous
+POST /api/telegram-send
+
+WebSocket:
+connect
+request_live_tick -> live_tick
