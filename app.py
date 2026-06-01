@@ -4,7 +4,8 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
-from psycopg2.extras import RealDictCursorimport os
+from psycopg2.extras import RealDictCursor
+import os
 import random
 from functools import wraps
 import datetime
