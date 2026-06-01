@@ -2,6 +2,8 @@
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+import eventlet
+eventlet.monkey_patch()
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -31,7 +33,11 @@ def db():
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "troque-essa-chave-em-producao")
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins='*')
+socketio = SocketIO(
+    app,
+    cors_allowed_origins="*",
+    async_mode="eventlet"
+)
 
 API_FOOTBALL_KEY = os.environ.get("API_FOOTBALL_KEY", "")
 
