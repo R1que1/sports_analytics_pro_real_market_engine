@@ -479,9 +479,12 @@ def api_predict():
     }
 
     if user:
-        con = db()
-        con.execute(
-            "INSERT INTO predictions(user_id,home,away,favorite,home_prob,draw_prob,away_prob,confidence,markets) VALUES(?,?,?,?,?,?,?,?,?)",
+con = db()
+
+cur = con.cursor()
+
+cur.execute(
+    "INSERT INTO ... predictions(user_id,home,away,favorite,home_prob,draw_prob,away_prob,confidence,markets) VALUES(?,?,?,?,?,?,?,?,?)",
             (user["id"], home, away, favorite, home_prob, draw_prob, away_prob, confidence, ", ".join(markets))
         )
         con.commit()
@@ -1537,14 +1540,25 @@ def api_real_odds_premium():
 
     enriched = enrich_market_value(items[:120])
 
-    con = db()
-    for x in enriched[:40]:
-        con.execute(
-            "INSERT INTO market_snapshots(fixture,market,bookmaker,odd,value_score) VALUES(?,?,?,?,?)",
-            (x.get("fixture"), f"{x.get('market')} - {x.get('selection')}", x.get("bookmaker"), x.get("odd"), x.get("value_score"))
+con = db()
+
+cur = con.cursor()
+
+for x in enriched[:40]:
+    cur.execute(
+        "INSERT INTO market_snapshots(fixture,market,bookmaker,odd,value_score) VALUES(%s,%s,%s,%s,%s)",
+        (
+            x.get("fixture"),
+            f"{x.get('market')} - {x.get('selection')}",
+            x.get("bookmaker"),
+            x.get("odd"),
+            x.get("value_score")
         )
-    con.commit()
-    con.close()
+    )
+
+con.commit()
+cur.close()
+con.close()
 
     return jsonify({"source": source, "count": len(enriched), "data": enriched})
 
