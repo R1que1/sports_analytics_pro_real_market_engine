@@ -3,8 +3,8 @@ from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3
-import os
+import psycopg2
+from psycopg2.extras import RealDictCursorimport os
 import random
 from functools import wraps
 import datetime
@@ -19,7 +19,13 @@ except Exception:
     mercadopago = None
 
 APP_NAME = "Sports Analytics Pro"
-DB_PATH = "sports_pro.db"
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+def db():
+    return psycopg2.connect(
+        DATABASE_URL,
+        cursor_factory=RealDictCursor
+    )
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "troque-essa-chave-em-producao")
