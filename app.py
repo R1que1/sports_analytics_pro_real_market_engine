@@ -1,12 +1,14 @@
+import eventlet
+eventlet.monkey_patch()
 
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
-import eventlet
-eventlet.monkey_patch()
 from werkzeug.security import generate_password_hash, check_password_hash
+
 import psycopg2
 from psycopg2.extras import RealDictCursor
+
 import os
 import random
 from functools import wraps
@@ -16,6 +18,7 @@ import jwt
 import math
 import base64
 import uuid
+
 try:
     import mercadopago
 except Exception:
@@ -44,10 +47,13 @@ API_FOOTBALL_KEY = os.environ.get("API_FOOTBALL_KEY", "")
 # =========================
 # BANCO DE DADOS
 # =========================
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
 def db():
-    con = sqlite3.connect(DB_PATH)
-    con.row_factory = sqlite3.Row
-    return con
+    return psycopg2.connect(
+        DATABASE_URL,
+        cursor_factory=RealDictCursor
+    )
 
 def init_db():
     con = db()
