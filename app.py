@@ -307,15 +307,6 @@ def current_user():
 # =========================
 # ROTAS
 # =========================
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-@app.route("/api/me")
-def api_me():
-    user = current_user()
-    return jsonify({"logged": bool(user), "user": user})
-
 @app.route("/api/login", methods=["POST"])
 def api_login():
     data = request.json or {}
@@ -323,13 +314,24 @@ def api_login():
     password = data.get("password", "")
 
     con = db()
-    user = con.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+
+    cur = con.cursor()
+
+    cur.execute(
+        "SELECT * FROM users WHERE email = %s",
+        (email,)
+    )
+
+    user = cur.fetchone()
+
+    cur.close()
     con.close()
 
     if not user or not check_password_hash(user["password_hash"], password):
         return jsonify({"ok": False, "error": "Email ou senha incorretos"}), 401
 
     session["user_id"] = user["id"]
+
     return jsonify({
         "ok": True,
         "user": {
