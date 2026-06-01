@@ -1774,3 +1774,7 @@ if __name__ == "__main__":
         debug=False,
         allow_unsafe_werkzeug=True
     )
+
+@app.route("/")
+def index():
+    return render_template("index.html")
