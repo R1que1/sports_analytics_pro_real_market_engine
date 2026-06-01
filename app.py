@@ -1,5 +1,4 @@
-import eventlet
-eventlet.monkey_patch()
+
 
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
@@ -39,7 +38,7 @@ CORS(app)
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",
-    async_mode="eventlet"
+    async_mode="threading"
 )
 
 API_FOOTBALL_KEY = os.environ.get("API_FOOTBALL_KEY", "")
@@ -1770,5 +1769,6 @@ if __name__ == "__main__":
         app,
         host="0.0.0.0",
         port=port,
-        debug=False
+        debug=False,
+        allow_unsafe_werkzeug=True
     )
