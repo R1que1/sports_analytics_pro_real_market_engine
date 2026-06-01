@@ -1744,4 +1744,11 @@ def api_deploy_24h_guide():
 
 if __name__ == "__main__":
     init_db()
-    socketio.run(app, debug=True, port=5000, allow_unsafe_werkzeug=True)
+
+    port = int(os.environ.get("PORT", 10000))
+
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False
+    )
