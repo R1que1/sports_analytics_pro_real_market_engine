@@ -1299,12 +1299,40 @@ def api_system_health():
         "version": "Ultimate Realtime"
     })
 
+
+@app.route("/api/me")
+def api_me():
+    user = current_user()
+
+    if not user:
+        return jsonify({"logged": False})
+
+    return jsonify({
+        "logged": True,
+        "user": user
+    })
+
 @app.route("/api/v1/predictions")
 def api_public_predictions():
     con = db()
-    rows = con.execute("SELECT id,home,away,favorite,home_prob,draw_prob,away_prob,confidence,markets,created_at FROM predictions ORDER BY id DESC LIMIT 30").fetchall()
+    cur = con.cursor()
+
+    cur.execute("""
+        SELECT id,home,away,favorite,home_prob,draw_prob,away_prob,confidence,markets,created_at
+        FROM predictions
+        ORDER BY id DESC
+        LIMIT 30
+    """)
+
+    rows = cur.fetchall()
+
+    cur.close()
     con.close()
-    return jsonify({"app": "Sports Analytics Pro", "data": [dict(r) for r in rows]})
+
+    return jsonify({
+        "app": "Sports Analytics Pro",
+        "data": rows
+    })
 
 @app.route("/api/postgres-guide")
 def api_postgres_guide():
