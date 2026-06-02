@@ -127,12 +127,41 @@ function logoOrBall(url){
 
 function matchCard(g){
   return `
-    <div class="match">
-      <div class="league">${g.league} <span class="pill">${g.status || "LIVE"}</span></div>
-      <div class="team">${logoOrBall(g.homeLogo)}<span>${g.home}</span><b>${g.homeGoals}</b></div>
-      <div class="team">${logoOrBall(g.awayLogo)}<span>${g.away}</span><b>${g.awayGoals}</b></div>
-      <small><span class="purple-text">${g.minute || 0}'</span> Pressão ofensiva</small>
-      <div class="bar"><div style="width:${g.pressure || 55}%"></div></div>
+    <div class="live-card-premium">
+
+      <div class="live-top">
+        <span class="league-name">${g.league}</span>
+        <span class="status-live">${g.status || "LIVE"}</span>
+      </div>
+
+      <div class="teams-live">
+
+        <div class="team-live">
+          <img src="${g.homeLogo}" class="team-logo">
+          <span>${g.home}</span>
+        </div>
+
+        <div class="score-live">
+          ${g.homeGoals} - ${g.awayGoals}
+        </div>
+
+        <div class="team-live">
+          <img src="${g.awayLogo}" class="team-logo">
+          <span>${g.away}</span>
+        </div>
+
+      </div>
+
+      <div class="minute-live">
+        ⏱ ${g.minute || 0}'
+      </div>
+
+      <div class="pressure-bar">
+        <div class="pressure-fill"
+             style="width:${g.pressure || 55}%">
+        </div>
+      </div>
+
     </div>
   `;
 }

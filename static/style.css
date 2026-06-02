@@ -35,3 +35,81 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
 .heat-mid{background:rgba(255,209,102,.25)}
 .heat-high{background:rgba(255,76,106,.35);box-shadow:0 0 18px rgba(255,76,106,.35)}
 .pix-code{word-break:break-all;background:#080812;border:1px solid #2a1645;border-radius:10px;padding:14px;margin-top:12px;color:#d9c7ff}
+
+
+.live-card-premium{
+    background:#0d0d18;
+    border:1px solid #6d28ff55;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 0 20px rgba(132,0,255,.15);
+}
+
+.live-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+.league-name{
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+}
+
+.status-live{
+    background:#6d28ff;
+    padding:4px 10px;
+    border-radius:10px;
+    font-size:12px;
+    color:#fff;
+}
+
+.teams-live{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.team-live{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    width:120px;
+    text-align:center;
+}
+
+.team-logo{
+    width:52px;
+    height:52px;
+    object-fit:contain;
+}
+
+.score-live{
+    font-size:32px;
+    font-weight:bold;
+    color:#fff;
+}
+
+.minute-live{
+    margin-top:14px;
+    font-size:13px;
+    color:#b388ff;
+    text-align:center;
+}
+
+.pressure-bar{
+    width:100%;
+    height:8px;
+    background:#1c1c2e;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:12px;
+}
+
+.pressure-fill{
+    height:100%;
+    background:linear-gradient(90deg,#7b2cff,#d946ef);
+}
