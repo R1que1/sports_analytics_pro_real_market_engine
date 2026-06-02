@@ -520,16 +520,6 @@ def api_live():
         "games": games
     })
 
-        except Exception as e:
-            pass
-
-    games = [
-        {"league":"UEFA Champions League","minute":67,"status":"2H","home":"Manchester City","away":"Real Madrid","homeGoals":2,"awayGoals":1,"pressure":58,"live":True},
-        {"league":"Brasileirão Série A","minute":45,"status":"HT","home":"Flamengo","away":"Palmeiras","homeGoals":1,"awayGoals":0,"pressure":68,"live":True},
-        {"league":"Premier League","minute":0,"status":"HT","home":"Liverpool","away":"Chelsea","homeGoals":2,"awayGoals":2,"pressure":70,"live":True},
-        {"league":"La Liga","minute":62,"status":"2H","home":"Barcelona","away":"Real Sociedad","homeGoals":3,"awayGoals":1,"pressure":76,"live":True},
-    ]
-    return jsonify({"source": "demo", "games": games})
 
 @app.route("/api/predict", methods=["POST"])
 def api_predict():
