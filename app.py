@@ -450,7 +450,8 @@ def api_live():
 
             params = {
                 "date": today,
-                "timezone": "America/Sao_Paulo"
+                "timezone": "America/Sao_Paulo",
+                "status": "NS-1H-HT-2H-ET-BT-P"
             }
 
             r = requests.get(
