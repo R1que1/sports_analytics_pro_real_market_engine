@@ -17,6 +17,7 @@ import jwt
 import math
 import base64
 import uuid
+import re
 
 try:
     import mercadopago
@@ -26,11 +27,70 @@ except Exception:
 APP_NAME = "Sports Analytics Pro"
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
+class CursorWrapper:
+    def __init__(self, cur):
+        self.cur = cur
+        self.lastrowid = None
+
+    def _fix_sql(self, sql):
+        sql = sql.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "SERIAL PRIMARY KEY")
+        sql = sql.replace("?", "%s")
+        return sql
+
+    def execute(self, sql, params=None):
+        sql = self._fix_sql(sql)
+        self.cur.execute(sql, params or None)
+        try:
+            if sql.strip().upper().startswith("INSERT"):
+                self.cur.execute("SELECT LASTVAL() AS id")
+                row = self.cur.fetchone()
+                self.lastrowid = row["id"] if isinstance(row, dict) else row[0]
+        except Exception:
+            pass
+        return self
+
+    def executemany(self, sql, seq_params):
+        sql = self._fix_sql(sql)
+        self.cur.executemany(sql, seq_params)
+        return self
+
+    def fetchone(self):
+        return self.cur.fetchone()
+
+    def fetchall(self):
+        return self.cur.fetchall()
+
+    def close(self):
+        return self.cur.close()
+
+class DBWrapper:
+    def __init__(self):
+        if not DATABASE_URL:
+            raise RuntimeError("DATABASE_URL não configurado no Render/Supabase")
+        self.con = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+
+    def cursor(self):
+        return CursorWrapper(self.con.cursor())
+
+    def execute(self, sql, params=None):
+        cur = self.cursor()
+        return cur.execute(sql, params)
+
+    def executemany(self, sql, seq_params):
+        cur = self.cursor()
+        return cur.executemany(sql, seq_params)
+
+    def commit(self):
+        return self.con.commit()
+
+    def rollback(self):
+        return self.con.rollback()
+
+    def close(self):
+        return self.con.close()
+
 def db():
-    return psycopg2.connect(
-        DATABASE_URL,
-        cursor_factory=RealDictCursor
-    )
+    return DBWrapper()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "troque-essa-chave-em-producao")
@@ -46,13 +106,6 @@ API_FOOTBALL_KEY = os.environ.get("API_FOOTBALL_KEY", "")
 # =========================
 # BANCO DE DADOS
 # =========================
-DATABASE_URL = os.environ.get("DATABASE_URL")
-
-def db():
-    return psycopg2.connect(
-        DATABASE_URL,
-        cursor_factory=RealDictCursor
-    )
 
 def init_db():
     con = db()
@@ -66,7 +119,7 @@ def init_db():
         password_hash TEXT NOT NULL,
         plan TEXT DEFAULT 'VIP',
         role TEXT DEFAULT 'user',
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -82,7 +135,7 @@ def init_db():
         away_prob INTEGER,
         confidence INTEGER,
         markets TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -100,7 +153,7 @@ def init_db():
         external_id TEXT,
         amount REAL,
         next_billing_date TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -114,7 +167,7 @@ def init_db():
         bookmaker_b TEXT,
         odd_b REAL,
         margin REAL,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -124,7 +177,7 @@ def init_db():
         filename TEXT,
         extracted_text TEXT,
         odds_found TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -136,7 +189,7 @@ def init_db():
         min_confidence INTEGER,
         min_value_score INTEGER,
         enabled INTEGER DEFAULT 1,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -148,7 +201,7 @@ def init_db():
         bookmaker TEXT,
         odd REAL,
         value_score INTEGER,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -163,7 +216,7 @@ def init_db():
         stake REAL,
         result TEXT DEFAULT 'open',
         profit REAL DEFAULT 0,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -174,7 +227,7 @@ def init_db():
         accuracy REAL,
         status TEXT,
         notes TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -183,7 +236,7 @@ def init_db():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         message TEXT,
         status TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -196,7 +249,7 @@ def init_db():
         status TEXT DEFAULT 'pending',
         mp_payment_id TEXT,
         qr_code TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -207,7 +260,7 @@ def init_db():
         real_result TEXT,
         hit INTEGER DEFAULT 0,
         profit REAL DEFAULT 0,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -218,7 +271,7 @@ def init_db():
         description TEXT,
         amount REAL,
         type TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -230,7 +283,7 @@ def init_db():
         away TEXT,
         market TEXT,
         confidence INTEGER,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -242,7 +295,7 @@ def init_db():
         odd REAL,
         fair_odd REAL,
         value_score INTEGER,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -252,7 +305,7 @@ def init_db():
         title TEXT,
         description TEXT,
         confidence INTEGER,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -357,15 +410,21 @@ def api_register():
         con = db()
         cur = con.cursor()
         cur.execute(
-            "INSERT INTO users(name,email,password_hash,plan,role) VALUES(?,?,?,?,?)",
+            "INSERT INTO users(name,email,password_hash,plan,role) VALUES(%s,%s,%s,%s,%s) RETURNING id",
             (name, email, generate_password_hash(password), "VIP", "user")
         )
+        new_user = cur.fetchone()
         con.commit()
-        session["user_id"] = cur.lastrowid
+        session["user_id"] = new_user["id"]
         con.close()
         return jsonify({"ok": True})
-    except sqlite3.IntegrityError:
-        return jsonify({"ok": False, "error": "Email já cadastrado"}), 400
+    except Exception as e:
+        try:
+            con.rollback()
+            con.close()
+        except Exception:
+            pass
+        return jsonify({"ok": False, "error": "Email já cadastrado ou erro no cadastro"}), 400
 
 @app.route("/api/logout", methods=["POST"])
 def api_logout():
@@ -479,12 +538,10 @@ def api_predict():
     }
 
     if user:
-con = db()
-
-cur = con.cursor()
-
-cur.execute(
-    "INSERT INTO ... predictions(user_id,home,away,favorite,home_prob,draw_prob,away_prob,confidence,markets) VALUES(?,?,?,?,?,?,?,?,?)",
+        con = db()
+        cur = con.cursor()
+        cur.execute(
+            "INSERT INTO predictions(user_id,home,away,favorite,home_prob,draw_prob,away_prob,confidence,markets) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",
             (user["id"], home, away, favorite, home_prob, draw_prob, away_prob, confidence, ", ".join(markets))
         )
         con.commit()
@@ -1234,7 +1291,7 @@ def api_telegram_send():
 def api_system_health():
     return jsonify({
         "backend": "online",
-        "database": "sqlite/postgresql-ready",
+        "database": "postgresql",
         "websocket": "enabled",
         "api_football": "configured" if API_FOOTBALL_KEY else "demo",
         "mercado_pago": "configured" if os.environ.get("MERCADO_PAGO_TOKEN") else "demo",
@@ -1256,7 +1313,7 @@ def api_postgres_guide():
         "steps": [
             "Criar banco PostgreSQL no Render/Railway/Supabase",
             "Adicionar DATABASE_URL nas variáveis de ambiente",
-            "Trocar sqlite3 por SQLAlchemy em produção",
+            "Banco PostgreSQL/Supabase configurado",
             "Rodar migrações",
             "Ativar backups automáticos"
         ],
@@ -1540,25 +1597,22 @@ def api_real_odds_premium():
 
     enriched = enrich_market_value(items[:120])
 
-con = db()
-
-cur = con.cursor()
-
-for x in enriched[:40]:
-    cur.execute(
-        "INSERT INTO market_snapshots(fixture,market,bookmaker,odd,value_score) VALUES(%s,%s,%s,%s,%s)",
-        (
-            x.get("fixture"),
-            f"{x.get('market')} - {x.get('selection')}",
-            x.get("bookmaker"),
-            x.get("odd"),
-            x.get("value_score")
+    con = db()
+    cur = con.cursor()
+    for x in enriched[:40]:
+        cur.execute(
+            "INSERT INTO market_snapshots(fixture,market,bookmaker,odd,value_score) VALUES(%s,%s,%s,%s,%s)",
+            (
+                x.get("fixture"),
+                f"{x.get('market')} - {x.get('selection')}",
+                x.get("bookmaker"),
+                x.get("odd"),
+                x.get("value_score")
+            )
         )
-    )
-
-con.commit()
-cur.close()
-con.close()
+    con.commit()
+    cur.close()
+    con.close()
 
     return jsonify({"source": source, "count": len(enriched), "data": enriched})
 
@@ -1776,9 +1830,19 @@ def api_deploy_24h_guide():
         "env": ["SECRET_KEY","JWT_SECRET","DATABASE_URL","API_FOOTBALL_KEY","MERCADO_PAGO_TOKEN","TELEGRAM_BOT_TOKEN","TELEGRAM_CHAT_ID","ODDS_API_KEY"]
     })
 
-if __name__ == "__main__":
-    init_db()
 
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+# Inicializa o banco também no Render/Gunicorn
+try:
+    init_db()
+except Exception as e:
+    print(f"Erro ao inicializar banco: {e}")
+
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
 
     socketio.run(
@@ -1788,7 +1852,3 @@ if __name__ == "__main__":
         debug=False,
         allow_unsafe_werkzeug=True
     )
-
-@app.route("/")
-def index():
-    return render_template("index.html")
