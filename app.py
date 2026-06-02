@@ -433,37 +433,93 @@ def api_logout():
 
 @app.route("/api/live")
 def api_live():
-    # API-Football real se tiver chave. Se não tiver, entra demo premium.
+
+    games = []
+
     if API_FOOTBALL_KEY:
+
         try:
+
             today = datetime.date.today().isoformat()
+
             url = "https://v3.football.api-sports.io/fixtures"
-            headers = {"x-apisports-key": API_FOOTBALL_KEY}
-            params = {"date": today}
-            r = requests.get(url, headers=headers, params=params, timeout=12)
+
+            headers = {
+                "x-apisports-key": API_FOOTBALL_KEY
+            }
+
+            params = {
+                "date": today,
+                "live": "all"
+            }
+
+            r = requests.get(
+                url,
+                headers=headers,
+                params=params,
+                timeout=20
+            )
+
             data = r.json()
-            response = data.get("response", [])
-            games = []
-            for item in response[:20]:
+
+            fixtures = data.get("response", [])
+
+            for item in fixtures[:20]:
+
                 fixture = item.get("fixture", {})
-                league = item.get("league", {})
                 teams = item.get("teams", {})
                 goals = item.get("goals", {})
+                league = item.get("league", {})
+
                 games.append({
-                    "league": league.get("name", "Liga"),
-                    "minute": fixture.get("status", {}).get("elapsed") or 0,
+
+                    "league": league.get("name"),
+
+                    "minute": fixture.get("status", {}).get("elapsed", 0),
+
                     "status": fixture.get("status", {}).get("short", "NS"),
-                    "home": teams.get("home", {}).get("name", "Casa"),
-                    "away": teams.get("away", {}).get("name", "Fora"),
-                    "homeLogo": teams.get("home", {}).get("logo", ""),
-                    "awayLogo": teams.get("away", {}).get("logo", ""),
-                    "homeGoals": goals.get("home") if goals.get("home") is not None else "-",
-                    "awayGoals": goals.get("away") if goals.get("away") is not None else "-",
-                    "pressure": random.randint(45, 82),
-                    "live": fixture.get("status", {}).get("short") in ["1H", "2H", "HT", "ET", "P"]
+
+                    "home": teams.get("home", {}).get("name"),
+
+                    "away": teams.get("away", {}).get("name"),
+
+                    "homeLogo": teams.get("home", {}).get("logo"),
+
+                    "awayLogo": teams.get("away", {}).get("logo"),
+
+                    "homeGoals": goals.get("home", 0),
+
+                    "awayGoals": goals.get("away", 0),
+
+                    "pressure": random.randint(45, 92),
+
+                    "live": True
                 })
-            if games:
-                return jsonify({"source": "api-football", "games": games})
+
+        except Exception as e:
+
+            print("ERRO API LIVE:", e)
+
+    if not games:
+
+        games = [
+            {
+                "league":"Champions League",
+                "minute":67,
+                "status":"2H",
+                "home":"Manchester City",
+                "away":"Real Madrid",
+                "homeGoals":2,
+                "awayGoals":1,
+                "pressure":88,
+                "live":True
+            }
+        ]
+
+    return jsonify({
+        "games": games
+    })
+
         except Exception as e:
             pass
 
