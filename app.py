@@ -516,10 +516,10 @@ def api_live():
             }
         ]
 
-return jsonify({
-    "source": "api-football" if API_FOOTBALL_KEY else "demo-sem-chave",
-    "games": games
-})
+    return jsonify({
+        "source": "api-football" if API_FOOTBALL_KEY else "demo-sem-chave",
+        "games": games
+    })
 
 
 @app.route("/api/predict", methods=["POST"])
