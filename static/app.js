@@ -180,6 +180,36 @@ class="team-logo"
 Over 2.5 Goals
 </div>
 
+<div class="radar-box">
+
+<div class="radar-item">
+🔥 Momentum:
+<span class="green">
+${Math.floor((g.pressure || 70) + 8)}%
+</span>
+</div>
+
+<div class="radar-item">
+⚽ Ataque perigoso:
+<span class="green">
+${Math.floor((g.pressure || 70) - 12)}%
+</span>>
+</div>
+
+<div class="radar-item">
+🚨 Chance de gol:
+<span class="green">
+${Math.floor((g.pressure || 70) - 5)}%
+</span>
+</div>
+
+<div class="radar-item">
+🏳️ Escanteio provável:
+<span class="green">
+${Math.floor((g.pressure || 70) - 18)}%
+</span>>
+</div>
+
 </div>
 `;
 }
