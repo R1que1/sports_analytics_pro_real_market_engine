@@ -180,6 +180,18 @@ class="team-logo"
 Over 2.5 Goals
 </div>
 
+<div class="live-alert">
+
+${(g.pressure || 70) >= 90
+? "🚨 GOL IMINENTE"
+: (g.pressure || 70) >= 80
+? "🔥 PRESSÃO EXTREMA"
+: (g.pressure || 70) >= 70
+? "⚠️ ATAQUE MUITO FORTE"
+: "📊 JOGO CONTROLADO"}
+
+</div>
+
 <div class="radar-box">
 
 <div class="radar-item">
