@@ -211,6 +211,9 @@ ${Math.floor((g.pressure || 70) - 18)}%
 </div>
 
 </div>
+
+</div>
+
 `;
 }
 
