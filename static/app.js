@@ -183,33 +183,35 @@ Over 2.5 Goals
 <div class="radar-box">
 
 <div class="radar-item">
-🔥 Momentum:
-<span class="green">
-${Math.floor((g.pressure || 70) + 8)}%
-</span>
+    <div class="radar-label">🔥 Momentum</div>
+    <div class="radar-value">${Math.floor((g.pressure || 70) + 8)}%</div>
+    <div class="radar-mini-bar">
+        <div class="radar-mini-fill" style="width:${Math.floor((g.pressure || 70) + 8)}%"></div>
+    </div>
 </div>
 
 <div class="radar-item">
-⚽ Ataque perigoso:
-<span class="green">
-${Math.floor((g.pressure || 70) - 12)}%
-</span>>
+    <div class="radar-label">🌐 Ataque perigoso</div>
+    <div class="radar-value">${Math.floor((g.pressure || 70) - 12)}%</div>
+    <div class="radar-mini-bar">
+        <div class="radar-mini-fill" style="width:${Math.floor((g.pressure || 70) - 12)}%"></div>
+    </div>
 </div>
 
 <div class="radar-item">
-🚨 Chance de gol:
-<span class="green">
-${Math.floor((g.pressure || 70) - 5)}%
-</span>
+    <div class="radar-label">🚨 Chance de gol</div>
+    <div class="radar-value">${Math.floor((g.pressure || 70) - 5)}%</div>
+    <div class="radar-mini-bar">
+        <div class="radar-mini-fill" style="width:${Math.floor((g.pressure || 70) - 5)}%"></div>
+    </div>
 </div>
 
 <div class="radar-item">
-🏳️ Escanteio provável:
-<span class="green">
-${Math.floor((g.pressure || 70) - 18)}%
-</span>>
-</div>
-
+    <div class="radar-label">🏳️ Escanteio provável</div>
+    <div class="radar-value">${Math.floor((g.pressure || 70) - 18)}%</div>
+    <div class="radar-mini-bar">
+        <div class="radar-mini-fill" style="width:${Math.floor((g.pressure || 70) - 18)}%"></div>
+    </div>
 </div>
 
 </div>
