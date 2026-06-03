@@ -113,3 +113,52 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
     height:100%;
     background:linear-gradient(90deg,#7b2cff,#d946ef);
 }
+
+
+.elite-ia{
+    margin-top:12px;
+    color:#00ff99;
+    font-weight:700;
+    text-align:center;
+    font-size:15px;
+}
+
+.opportunity{
+    margin-top:8px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(0,255,153,.25);
+    border-radius:12px;
+    padding:8px;
+    text-align:center;
+    color:#ffffff;
+    font-size:13px;
+}
+
+.team-logo{
+    width:55px;
+    height:55px;
+    object-fit:contain;
+}
+
+.score-live{
+    font-size:42px;
+    font-weight:800;
+    color:white;
+    min-width:120px;
+    text-align:center;
+}
+
+.live-card{
+    background:#0f172a;
+    border:1px solid #1e293b;
+    border-radius:20px;
+    padding:22px;
+    margin-bottom:20px;
+    transition:.3s;
+}
+
+.live-card:hover{
+    transform:translateY(-3px);
+    border-color:#00ff99;
+    box-shadow:0 0 25px rgba(0,255,153,.15);
+}

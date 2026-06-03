@@ -137,7 +137,7 @@ function matchCard(g){
       <div class="teams-live">
 
         <div class="team-live">
-          <img src="${g.homeLogo}" class="team-logo">
+          <img loading="lazy" src="${g.homeLogo}" class="team-logo">
           <span>${g.home}</span>
         </div>
 
@@ -146,7 +146,7 @@ function matchCard(g){
         </div>
 
         <div class="team-live">
-          <img src="${g.awayLogo}" class="team-logo">
+          <img loading="lazy" src="${g.awayLogo}" class="team-logo">
           <span>${g.away}</span>
         </div>
 
@@ -157,13 +157,23 @@ function matchCard(g){
       </div>
 
       <div class="pressure-bar">
-        <div class="pressure-fill"
-             style="width:${g.pressure || 55}%">
-        </div>
-      </div>
-
+    <div class="pressure-fill"
+        style="width:${g.pressure || 55}%">
     </div>
-  `;
+</div>
+
+<div class="elite-ia">
+🔥 IA Favorito:
+<b>${g.home}</b> ${g.pressure || 74}%
+</div>
+
+<div class="opportunity">
+⚡ Oportunidade:
+Over 2.5 Goals
+</div>
+
+</div>
+`;
 }
 
 function fillPredictions(){

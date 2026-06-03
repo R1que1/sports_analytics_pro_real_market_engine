@@ -98,7 +98,9 @@ CORS(app)
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",
-    async_mode="threading"
+    async_mode="threading",
+    ping_timeout=60,
+    ping_interval=25
 )
 
 API_FOOTBALL_KEY = os.environ.get("API_FOOTBALL_KEY", "")
@@ -458,7 +460,92 @@ def api_live():
                 url,
                 headers=headers,
                 params=params,
-                timeout=20
+                timeout=10
+            )
+
+            data = r.json()
+
+            fixtures = data.get("response", [])
+
+            for item in fixtures[:20]:
+
+                fixture = item.get("fixture", {})
+                teams = item.get("teams", {})
+                goals = item.get("goals", {})
+                league = item.get("league", {})
+
+                games.append({
+
+                    "league": league.get("name"),
+
+                    "minute": fixture.get("status", {}).get("elapsed", 0),
+
+                    "status": fixture.get("status", {}).get("short", "NS"),
+
+                    "home": teams.get("home", {}).get("name"),
+
+                    "away": teams.get("away", {}).get("name"),
+
+                    "homeLogo": teams.get("home", {}).get("logo"),
+
+                    "awayLogo": teams.get("away", {}).get("logo"),
+
+                    "homeGoals": goals.get("home", 0),
+
+                    "awayGoals": goals.get("away", 0),
+
+                    "pressure": random.randint(45, 92),
+
+                    "live": True
+                })
+
+        except Exception as e:
+
+            print("ERRO API LIVE:", e)
+
+LIVE_CACHE = {
+    "time": None,
+    "data": None
+}
+
+@app.route("/api/live")
+def api_live():
+
+    global LIVE_CACHE
+
+    agora = datetime.datetime.now()
+
+    if LIVE_CACHE["time"] and LIVE_CACHE["data"]:
+        segundos = (agora - LIVE_CACHE["time"]).total_seconds()
+
+        if segundos < 60:
+            return jsonify(LIVE_CACHE["data"])
+
+    games = []
+
+    if API_FOOTBALL_KEY:
+
+        try:
+
+            today = datetime.date.today().isoformat()
+
+            url = "https://v3.football.api-sports.io/fixtures"
+
+            headers = {
+                "x-apisports-key": API_FOOTBALL_KEY
+            }
+
+            params = {
+                "date": today,
+                "timezone": "America/Sao_Paulo",
+                "status": "NS-1H-HT-2H-ET-BT-P"
+            }
+
+            r = requests.get(
+                url,
+                headers=headers,
+                params=params,
+                timeout=10
             )
 
             data = r.json()
@@ -517,10 +604,16 @@ def api_live():
             }
         ]
 
-    return jsonify({
+    resposta = {
         "source": "api-football" if API_FOOTBALL_KEY else "demo-sem-chave",
+        "cached": False,
         "games": games
-    })
+    }
+
+    LIVE_CACHE["time"] = agora
+    LIVE_CACHE["data"] = resposta
+
+    return jsonify(resposta)
 
 
 @app.route("/api/predict", methods=["POST"])
@@ -652,7 +745,7 @@ def api_get(path, params=None):
     try:
         url = f"https://v3.football.api-sports.io/{path}"
         headers = {"x-apisports-key": API_FOOTBALL_KEY}
-        r = requests.get(url, headers=headers, params=params or {}, timeout=15)
+        r = requests.get(url, headers=headers, params=params or {}, timeout=10)
         if r.status_code != 200:
             return None
         return r.json().get("response", [])
@@ -1592,7 +1685,7 @@ def api_football_real(path, params=None):
     try:
         url = f"https://v3.football.api-sports.io/{path}"
         headers = {"x-apisports-key": key}
-        r = requests.get(url, headers=headers, params=params or {}, timeout=18)
+        r = requests.get(url, headers=headers, params=params or {}, timeout=10)
         payload = r.json()
         return payload.get("response", [])
     except Exception:
