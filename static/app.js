@@ -269,6 +269,26 @@ style="width:${g.pressure || 70}%">
 <b>${Math.floor((g.pressure || 70) / 18)}</b>
 </div>
 
+<div class="detail-item">
+<span>⚡ Ataques perigosos</span>
+<b>${Math.floor((g.pressure || 70) / 2)}</b>
+</div>
+
+<div class="detail-item">
+<span>🎯 Precisão ofensiva</span>
+<b>${Math.floor((g.pressure || 70) + 12)}%</b>
+</div>
+
+<div class="detail-item">
+<span>📈 Intensidade IA</span>
+<b>${Math.floor((g.pressure || 70) + 18)}%</b>
+</div>
+
+<div class="detail-item">
+<span>🔥 xG estimado</span>
+<b>${((g.pressure || 70) / 33).toFixed(2)}</b>
+</div>
+
 </div>
 
 <div class="ia-reading">
