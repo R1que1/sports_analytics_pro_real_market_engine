@@ -137,7 +137,11 @@ function matchCard(g){
       <div class="teams-live">
 
         <div class="team-live">
-          <img loading="lazy" src="${g.homeLogo}" class="team-logo">
+          <img 
+loading="lazy"
+src="${g.homeLogo || 'https://cdn-icons-png.flaticon.com/512/53/53283.png'}"
+class="team-logo"
+>
           <span>${g.home}</span>
         </div>
 
@@ -146,7 +150,11 @@ function matchCard(g){
         </div>
 
         <div class="team-live">
-          <img loading="lazy" src="${g.awayLogo}" class="team-logo">
+          <img 
+loading="lazy"
+src="${g.awayLogo || 'https://cdn-icons-png.flaticon.com/512/53/53283.png'}"
+class="team-logo"
+>
           <span>${g.away}</span>
         </div>
 
