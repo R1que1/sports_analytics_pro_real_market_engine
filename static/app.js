@@ -273,11 +273,32 @@ style="width:${g.pressure || 70}%">
 
 <div class="ia-reading">
 
-🧠 IA detecta forte pressão ofensiva
-do ${g.home} nos últimos minutos.
+${(g.pressure || 70) >= 90
+? `🧠 ${g.home} domina completamente o jogo.
 
-Chance elevada de oportunidade
-ao vivo.
+IA detecta pressão ofensiva extrema,
+volume alto de ataque e chance
+muito elevada de próximo gol.`
+
+: (g.pressure || 70) >= 80
+
+? `🧠 ${g.home} controla o momentum da partida.
+
+IA identifica intensidade ofensiva,
+crescimento de finalizações e forte
+pressão territorial.`
+
+: (g.pressure || 70) >= 70
+
+? `🧠 ${g.home} mantém superioridade ofensiva.
+
+A IA vê oportunidades interessantes
+para mercados ao vivo.`
+
+: `🧠 Jogo equilibrado no momento.
+
+IA detecta menor intensidade ofensiva
+e ritmo controlado.`}
 
 </div>
 
