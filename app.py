@@ -511,6 +511,18 @@ def api_live():
                     "awayGoals": goals.get("away", 0),
 
                     "pressure": random.randint(45, 92),
+                     
+                    "shots": random.randint(6, 18),
+                   
+                    "corners": random.randint(2, 11),
+                    
+                    "cards": random.randint(0, 5),
+                   
+                    "possession": random.randint(45, 68),
+                   
+                    "dangerousAttacks": random.randint(25, 74),
+                    
+                    "xg": round(random.uniform(0.8, 2.9), 2),
 
                     "live": True
                 })

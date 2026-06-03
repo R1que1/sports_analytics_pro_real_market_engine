@@ -442,3 +442,27 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
         opacity:.8;
     }
 }
+
+.match-details{
+
+    max-height:0;
+    overflow:hidden;
+
+    opacity:0;
+
+    transition:
+        max-height .5s ease,
+        opacity .4s ease,
+        margin-top .4s ease;
+
+    margin-top:0;
+}
+
+.live-card.expanded .match-details{
+
+    max-height:800px;
+
+    opacity:1;
+
+    margin-top:18px;
+}

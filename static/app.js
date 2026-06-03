@@ -127,8 +127,7 @@ function logoOrBall(url){
 
 function matchCard(g){
   return `
-    <div class="live-card-premium"
-onclick="toggleDetails(this)">
+<div class="live-card" onclick="this.classList.toggle('expanded')">
 
       <div class="live-top">
         <span class="league-name">${g.league}</span>
@@ -251,27 +250,27 @@ style="width:${g.pressure || 70}%">
 
 <div class="detail-item">
 <span>📊 Posse</span>
-<b>${Math.floor((g.pressure || 70) - 8)}%</b>
+${g.possession || 55}%</b>
 </div>
 
 <div class="detail-item">
 <span>🎯 Finalizações</span>
-<b>${Math.floor((g.pressure || 70) / 6)}</b>
+${g.shots || 8}</b>
 </div>
 
 <div class="detail-item">
 <span>🚩 Escanteios</span>
-<b>${Math.floor((g.pressure || 70) / 9)}</b>
+${g.corners || 5}</b>
 </div>
 
 <div class="detail-item">
 <span>🟨 Cartões</span>
-<b>${Math.floor((g.pressure || 70) / 18)}</b>
+${g.cards || 2}</b>
 </div>
 
 <div class="detail-item">
 <span>⚡ Ataques perigosos</span>
-<b>${Math.floor((g.pressure || 70) / 2)}</b>
+${g.dangerousAttacks || 40}</b>
 </div>
 
 <div class="detail-item">
@@ -286,7 +285,7 @@ style="width:${g.pressure || 70}%">
 
 <div class="detail-item">
 <span>🔥 xG estimado</span>
-<b>${((g.pressure || 70) / 33).toFixed(2)}</b>
+${g.xg || 1.45}</b>
 </div>
 
 </div>
