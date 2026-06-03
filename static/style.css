@@ -466,3 +466,41 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
 
     margin-top:18px;
 }
+
+.live-card-premium{
+    cursor:pointer;
+}
+
+.live-card-premium::after{
+    content:"⬇ Ver detalhes";
+    display:block;
+    margin-top:12px;
+    text-align:center;
+    color:#b388ff;
+    font-size:12px;
+    font-weight:700;
+}
+
+.live-card-premium:has(.match-details.open)::after{
+    content:"⬆ Ocultar detalhes";
+}
+
+.live-card-premium:has(.match-details.open){
+    border-color:#00ff99;
+    box-shadow:
+        0 0 25px rgba(0,255,153,.20),
+        0 0 45px rgba(139,44,255,.18);
+}
+
+.match-details{
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:.45s ease;
+}
+
+.match-details.open{
+    max-height:700px;
+    opacity:1;
+    margin-top:18px;
+}
