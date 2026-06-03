@@ -289,20 +289,26 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
 }
 
 .attack-fill{
+
     height:100%;
     border-radius:999px;
 
     background:linear-gradient(
         90deg,
         #00ffd5,
-        #b100ff
+        #7a5cff,
+        #ff00ea
     );
 
-    box-shadow:
-        0 0 10px rgba(0,255,213,.35),
-        0 0 18px rgba(177,0,255,.35);
+    background-size:300% 300%;
 
-    animation:attackMove 2s linear infinite;
+    animation:
+        moveGradient 3s ease infinite,
+        pulseAttack 1.5s infinite;
+
+    box-shadow:
+        0 0 12px rgba(0,255,213,.5),
+        0 0 22px rgba(177,0,255,.35);
 }
 
 @keyframes attackMove{
@@ -375,4 +381,34 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
     color:#fff;
     line-height:1.6;
     font-size:13px;
+}
+
+@keyframes moveGradient{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+}
+
+@keyframes pulseAttack{
+
+    0%{
+        opacity:.8;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:.8;
+    }
 }
