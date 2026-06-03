@@ -256,7 +256,21 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
 }
 
 .attack-zone{
-    margin-top:12px;
+    margin-top:18px;
+    padding:14px;
+    border-radius:14px;
+
+    background:linear-gradient(
+        135deg,
+        rgba(0,255,213,.06),
+        rgba(177,0,255,.08)
+    );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 0 18px rgba(0,255,213,.08),
+        0 0 24px rgba(177,0,255,.08);
 }
 
 .attack-label{
@@ -268,7 +282,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
 
 .attack-bar{
     width:100%;
-    height:10px;
+    height:14px;
     border-radius:999px;
     background:rgba(255,255,255,.08);
     overflow:hidden;

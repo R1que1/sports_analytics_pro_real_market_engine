@@ -192,6 +192,22 @@ ${(g.pressure || 70) >= 90
 
 </div>
 
+<div class="attack-zone">
+
+<div class="attack-label">
+⚔️ Pressão ofensiva
+</div>
+
+<div class="attack-bar">
+
+<div class="attack-fill"
+style="width:${g.pressure || 70}%">
+</div>
+
+</div>
+
+</div>
+
 <div class="radar-box">
 
 <div class="radar-item">
