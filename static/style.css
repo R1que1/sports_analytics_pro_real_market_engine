@@ -412,3 +412,33 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
         opacity:.8;
     }
 }
+
+@keyframes moveGradient{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+}
+
+@keyframes pulseAttack{
+
+    0%{
+        opacity:.8;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:.8;
+    }
+}
