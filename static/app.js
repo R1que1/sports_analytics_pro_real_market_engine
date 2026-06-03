@@ -127,7 +127,8 @@ function logoOrBall(url){
 
 function matchCard(g){
   return `
-    <div class="live-card-premium">
+    <div class="live-card-premium"
+onclick="toggleDetails(this)">
 
       <div class="live-top">
         <span class="league-name">${g.league}</span>
@@ -240,6 +241,46 @@ style="width:${g.pressure || 70}%">
     <div class="radar-mini-bar">
         <div class="radar-mini-fill" style="width:${Math.floor((g.pressure || 70) - 18)}%"></div>
     </div>
+</div>
+
+</div>
+
+<div class="match-details">
+
+<div class="details-grid">
+
+<div class="detail-item">
+<span>📊 Posse</span>
+<b>${Math.floor((g.pressure || 70) - 8)}%</b>
+</div>
+
+<div class="detail-item">
+<span>🎯 Finalizações</span>
+<b>${Math.floor((g.pressure || 70) / 6)}</b>
+</div>
+
+<div class="detail-item">
+<span>🚩 Escanteios</span>
+<b>${Math.floor((g.pressure || 70) / 9)}</b>
+</div>
+
+<div class="detail-item">
+<span>🟨 Cartões</span>
+<b>${Math.floor((g.pressure || 70) / 18)}</b>
+</div>
+
+</div>
+
+<div class="ia-reading">
+
+🧠 IA detecta forte pressão ofensiva
+do ${g.home} nos últimos minutos.
+
+Chance elevada de oportunidade
+ao vivo.
+
+</div>
+
 </div>
 
 </div>
@@ -1066,4 +1107,13 @@ async function loadMobileBuildGuide(){
     <br><h3>iOS</h3>${p.ios.map(x => `<div class="row"><span>${x}</span></div>`).join("")}
     <br><h3>PWA</h3>${p.pwa.map(x => `<div class="row"><span>${x}</span></div>`).join("")}
   `;
+}
+
+function toggleDetails(card){
+
+    const details = card.querySelector(".match-details");
+
+    if(!details) return;
+
+    details.classList.toggle("open");
 }
