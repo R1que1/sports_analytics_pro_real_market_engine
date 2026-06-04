@@ -111,6 +111,17 @@ async function loadStats(){
 }
 
 async function loadLive(){
+  
+document.getElementById("allGames").innerHTML = `
+<div class="loading-live">
+
+    <div class="loading-card"></div>
+    <div class="loading-card"></div>
+    <div class="loading-card"></div>
+
+</div>
+`;
+
   const r = await fetch("/api/live");
   const data = await r.json();
   const games = data.games || [];

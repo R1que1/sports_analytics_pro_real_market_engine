@@ -705,3 +705,38 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
         grid-template-columns:1fr 1fr;
     }
 }
+
+.loading-live{
+    display:grid;
+    gap:18px;
+}
+
+.loading-card{
+    height:220px;
+    border-radius:22px;
+    background:
+    linear-gradient(
+        90deg,
+        rgba(255,255,255,.04) 25%,
+        rgba(255,255,255,.08) 50%,
+        rgba(255,255,255,.04) 75%
+    );
+
+    background-size:400% 100%;
+
+    animation:skeletonLoading 1.8s ease infinite;
+
+    border:1px solid rgba(255,255,255,.05);
+}
+
+@keyframes skeletonLoading{
+
+    0%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0 50%;
+    }
+
+}
