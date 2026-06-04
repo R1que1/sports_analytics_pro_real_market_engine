@@ -492,50 +492,92 @@ def api_live():
 
                 games.append({
 
-                    "league": league.get("name"),
+    "league": league.get("name"),
 
-                    "minute": fixture.get("status", {}).get("elapsed", 0),
+    "minute": fixture.get("status", {}).get("elapsed", 0),
 
-                    "status": fixture.get("status", {}).get("short", "NS"),
+    "status": fixture.get("status", {}).get("short", "NS"),
 
-                    "home": teams.get("home", {}).get("name"),
+    "home": teams.get("home", {}).get("name"),
 
-                    "away": teams.get("away", {}).get("name"),
+    "away": teams.get("away", {}).get("name"),
 
-                    "homeLogo": teams.get("home", {}).get("logo"),
+    "homeLogo": teams.get("home", {}).get("logo"),
 
-                    "awayLogo": teams.get("away", {}).get("logo"),
+    "awayLogo": teams.get("away", {}).get("logo"),
 
-                    "homeGoals": goals.get("home", 0),
+    "homeGoals": goals.get("home", 0),
 
-                    "awayGoals": goals.get("away", 0),
+    "awayGoals": goals.get("away", 0),
 
-                    "pressure": random.randint(45, 92),
-                     
-                    "shots": random.randint(6, 18),
-                   
-                    "corners": random.randint(2, 11),
-                    
-                    "cards": random.randint(0, 5),
-                   
-                    "possession": random.randint(45, 68),
-                   
-                    "dangerousAttacks": random.randint(25, 74),
-                    
-                    "xg": round(random.uniform(0.8, 2.9), 2),
+    # =========================
+    # ESTATÍSTICAS PREMIUM
+    # =========================
 
-                    "aiAnalysis": random.choice([
-                     
-                    "IA detecta domínio ofensivo forte e tendência de pressão crescente.",
-                    
-                     "Jogo com ritmo alto, boa intensidade e oportunidade ao vivo em             formação.",
-                     
-                     "Pressão ofensiva elevada com possibilidade de próximo gol nos minutos finais.",
-                     
-                     "Cenário favorável para mercados de gols, escanteios e momentum.",
-                     
-                     "IA recomenda monitorar entrada ao vivo com cautela e confirmar odd."
-]),
+    "home_stats": {
+
+        "possession": random.randint(48, 67),
+
+        "shots": random.randint(5, 18),
+
+        "shots_on_goal": random.randint(2, 9),
+
+        "corners": random.randint(1, 10),
+
+        "dangerous_attacks": random.randint(18, 72)
+
+    },
+
+    "away_stats": {
+
+        "possession": random.randint(33, 52),
+
+        "shots": random.randint(3, 14),
+
+        "shots_on_goal": random.randint(1, 7),
+
+        "corners": random.randint(1, 8),
+
+        "dangerous_attacks": random.randint(12, 58)
+
+    },
+
+    # =========================
+    # IA PREMIUM
+    # =========================
+
+    "aiAnalysis": random.choice([
+
+        "IA detecta pressão ofensiva crescente.",
+
+        "Mercado de gols apresenta valor.",
+
+        "Time mandante domina ações ofensivas.",
+
+        "Volume ofensivo elevado nos últimos minutos.",
+
+        "Partida favorável para entradas ao vivo."
+
+    ]),
+
+    "recommendedMarket": random.choice([
+
+        "Over 1.5 gols",
+
+        "Over 2.5 gols",
+
+        "Ambos marcam",
+
+        "Próximo gol",
+
+        "Escanteios ao vivo"
+
+    ]),
+
+    "marketConfidence": random.randint(72, 94),
+
+    "live": True
+})
 
 "recommendedMarket": random.choice([
     "Over 1.5 gols",
