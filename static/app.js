@@ -133,188 +133,122 @@ function logoOrBall(url){
 
 function matchCard(g){
   return `
-<div class="live-card
-${(g.pressure || 70) >= 85 ? 'danger-live' : ''}
-"
+<div class="live-card ${(g.marketConfidence || 70) >= 85 ? 'danger-live' : ''}"
 onclick="this.classList.toggle('expanded')">
 
-      <div class="live-top">
-        <span class="league-name">${g.league}</span>
-        <span class="status-live">${g.status || "LIVE"}</span>
-      </div>
+    <div class="live-top">
 
-      <div class="teams-live">
+        <span class="league-name">${g.league}</span>
+
+        <span class="status-live">
+            ${g.status || 'LIVE'}
+        </span>
+
+    </div>
+
+    <div class="teams-live">
 
         <div class="team-live">
-          <img 
-loading="lazy"
-src="${g.homeLogo || 'https://cdn-icons-png.flaticon.com/512/53/53283.png'}"
-class="team-logo"
->
-          <span>${g.home}</span>
+            <img
+                loading="lazy"
+                src="${g.homeLogo || 'https://cdn-icons-png.flaticon.com/512/53/53283.png'}"
+                class="team-logo"
+            >
+
+            <span>${g.home}</span>
         </div>
 
         <div class="score-live">
-          ${g.homeGoals} - ${g.awayGoals}
+            ${g.homeGoals ?? 0}
+            <small>x</small>
+            ${g.awayGoals ?? 0}
         </div>
 
         <div class="team-live">
-          <img 
-loading="lazy"
-src="${g.awayLogo || 'https://cdn-icons-png.flaticon.com/512/53/53283.png'}"
-class="team-logo"
->
-          <span>${g.away}</span>
+            <img
+                loading="lazy"
+                src="${g.awayLogo || 'https://cdn-icons-png.flaticon.com/512/53/53283.png'}"
+                class="team-logo"
+            >
+
+            <span>${g.away}</span>
         </div>
 
-      </div>
-
-      <div class="minute-live">
-        ⏱ ${g.minute || 0}'
-      </div>
-
-      <div class="pressure-bar">
-    <div class="pressure-fill"
-        style="width:${g.pressure || 55}%">
     </div>
-</div>
 
-<div class="elite-ia">
-🔥 IA Favorito:
-<b>${g.home}</b> ${g.pressure || 74}%
-</div>
+    <div class="pressure-wrapper">
 
-<div class="opportunity">
-⚡ Oportunidade:
-Over 2.5 Goals
-</div>
+        <div class="pressure-label">
+            🔥 Pressão IA
+        </div>
 
-<div class="live-alert">
+        <div class="pressure-bar">
+            <div
+                class="pressure-fill"
+                style="width:${g.marketConfidence || 70}%">
+            </div>
+        </div>
 
-${(g.pressure || 70) >= 90
-? "🚨 GOL IMINENTE"
-: (g.pressure || 70) >= 80
-? "🔥 PRESSÃO EXTREMA"
-: (g.pressure || 70) >= 70
-? "⚠️ ATAQUE MUITO FORTE"
-: "📊 JOGO CONTROLADO"}
+        <div class="pressure-percent">
+            ${g.marketConfidence || 70}%
+        </div>
 
-</div>
-
-<div class="attack-zone">
-
-<div class="attack-label">
-⚔️ Pressão ofensiva
-</div>
-
-<div class="attack-bar">
-
-<div class="attack-fill"
-style="width:${g.pressure || 70}%">
-</div>
-
-</div>
-
-</div>
-
-<div class="radar-box">
-
-<div class="radar-item">
-    <div class="radar-label">🔥 Momentum</div>
-    <div class="radar-value">${Math.floor((g.pressure || 70) + 8)}%</div>
-    <div class="radar-mini-bar">
-        <div class="radar-mini-fill" style="width:${Math.floor((g.pressure || 70) + 8)}%"></div>
     </div>
-</div>
 
-<div class="radar-item">
-    <div class="radar-label">🌐 Ataque perigoso</div>
-    <div class="radar-value">${Math.floor((g.pressure || 70) - 12)}%</div>
-    <div class="radar-mini-bar">
-        <div class="radar-mini-fill" style="width:${Math.floor((g.pressure || 70) - 12)}%"></div>
+    <div class="ai-box">
+
+        <div class="ai-title">
+            🧠 IA ELITE
+        </div>
+
+        <div class="ai-analysis">
+            ${g.aiAnalysis || 'IA analisando partida...'}
+        </div>
+
+        <div class="market-tag">
+            ${g.recommendedMarket || 'Over 1.5 gols'}
+        </div>
+
     </div>
-</div>
 
-<div class="radar-item">
-    <div class="radar-label">🚨 Chance de gol</div>
-    <div class="radar-value">${Math.floor((g.pressure || 70) - 5)}%</div>
-    <div class="radar-mini-bar">
-        <div class="radar-mini-fill" style="width:${Math.floor((g.pressure || 70) - 5)}%"></div>
+    <div class="expand-section">
+
+        <div class="expand-title">
+            📊 Estatísticas Premium
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-item">
+                <span>Posse</span>
+                <strong>${g.home_stats?.possession || 0}%</strong>
+            </div>
+
+            <div class="stat-item">
+                <span>Chutes</span>
+                <strong>${g.home_stats?.shots || 0}</strong>
+            </div>
+
+            <div class="stat-item">
+                <span>No alvo</span>
+                <strong>${g.home_stats?.shots_on_goal || 0}</strong>
+            </div>
+
+            <div class="stat-item">
+                <span>Escanteios</span>
+                <strong>${g.home_stats?.corners || 0}</strong>
+            </div>
+
+            <div class="stat-item">
+                <span>Ataques perigosos</span>
+                <strong>${g.home_stats?.dangerous_attacks || 0}</strong>
+            </div>
+
+        </div>
+
     </div>
-</div>
-
-<div class="radar-item">
-    <div class="radar-label">🏳️ Escanteio provável</div>
-    <div class="radar-value">${Math.floor((g.pressure || 70) - 18)}%</div>
-    <div class="radar-mini-bar">
-        <div class="radar-mini-fill" style="width:${Math.floor((g.pressure || 70) - 18)}%"></div>
-    </div>
-</div>
 
 </div>
-
-<div class="match-details">
-
-<div class="details-grid">
-
-<div class="detail-item">
-<span>📊 Posse</span>
-${g.possession || 55}%</b>
-</div>
-
-<div class="detail-item">
-<span>🎯 Finalizações</span>
-${g.shots || 8}</b>
-</div>
-
-<div class="detail-item">
-<span>🚩 Escanteios</span>
-${g.corners || 5}</b>
-</div>
-
-<div class="detail-item">
-<span>🟨 Cartões</span>
-${g.cards || 2}</b>
-</div>
-
-<div class="detail-item">
-<span>⚡ Ataques perigosos</span>
-${g.dangerousAttacks || 40}</b>
-</div>
-
-<div class="detail-item">
-<span>🎯 Precisão ofensiva</span>
-<b>${Math.floor((g.pressure || 70) + 12)}%</b>
-</div>
-
-<div class="detail-item">
-<span>📈 Intensidade IA</span>
-<b>${Math.floor((g.pressure || 70) + 18)}%</b>
-</div>
-
-<div class="detail-item">
-<span>🔥 xG estimado</span>
-${g.xg || 1.45}</b>
-</div>
-
-</div>
-
-<div class="ia-reading">
-
-🧠 ${g.aiAnalysis || "IA analisando o jogo em tempo real."}
-
-🎯 Mercado sugerido:
-${g.recommendedMarket || "Over 1.5 gols"}
-
-📊 Confiança:
-${g.marketConfidence || 78}%
-
-</div>
-
-</div>
-
-</div>
-
 `;
 }
 
