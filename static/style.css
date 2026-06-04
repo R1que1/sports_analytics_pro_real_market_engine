@@ -1034,3 +1034,136 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
     }
 
 }
+
+.hero-metric h2,
+.big,
+.metric-box h3,
+.confidence{
+    animation:numberGlow 2.5s ease infinite alternate;
+}
+
+@keyframes numberGlow{
+
+    from{
+        text-shadow:
+        0 0 0 rgba(139,44,255,0);
+    }
+
+    to{
+        text-shadow:
+        0 0 18px rgba(139,44,255,.55);
+    }
+
+}
+
+.card,
+.live-card,
+.hero-metric,
+.metric-box,
+.quick,
+.stat-item{
+
+    transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
+
+}
+
+.card:hover,
+.hero-metric:hover,
+.metric-box:hover,
+.quick:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 0 35px rgba(139,44,255,.18);
+
+}
+
+.live-card:hover{
+
+    transform:
+    translateY(-4px)
+    scale(1.01);
+
+    box-shadow:
+    0 0 45px rgba(139,44,255,.22);
+
+}
+
+.live-card.expanded{
+
+    border-color:
+    rgba(0,255,153,.22);
+
+    box-shadow:
+    0 0 55px rgba(0,255,153,.14);
+
+}
+
+.team-logo{
+
+    transition:
+    transform .3s ease,
+    filter .3s ease;
+
+}
+
+.live-card:hover .team-logo{
+
+    transform:scale(1.08);
+
+    filter:
+    drop-shadow(0 0 12px rgba(139,44,255,.55));
+
+}
+
+.hero-premium{
+
+    animation:
+    heroFade 1s ease;
+
+}
+
+@keyframes heroFade{
+
+    from{
+        opacity:0;
+        transform:translateY(18px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+.live-dot{
+
+    animation:
+    livePulse 1.5s infinite,
+    liveGlow 2s ease infinite;
+
+}
+
+@keyframes liveGlow{
+
+    0%{
+        box-shadow:
+        0 0 8px rgba(0,255,153,.3);
+    }
+
+    50%{
+        box-shadow:
+        0 0 20px rgba(0,255,153,.8);
+    }
+
+    100%{
+        box-shadow:
+        0 0 8px rgba(0,255,153,.3);
+    }
+
+}
