@@ -542,3 +542,24 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
         opacity:.7;
     }
 }
+
+.team-logo{
+
+    width:62px;
+    height:62px;
+
+    object-fit:contain;
+
+    filter:
+        drop-shadow(0 0 12px rgba(255,255,255,.12));
+
+    transition:.3s ease;
+}
+
+.team-logo:hover{
+
+    transform:scale(1.08);
+
+    filter:
+        drop-shadow(0 0 18px rgba(162,0,255,.45));
+}
