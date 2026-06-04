@@ -133,7 +133,10 @@ function logoOrBall(url){
 
 function matchCard(g){
   return `
-<div class="live-card" onclick="this.classList.toggle('expanded')">
+<div class="live-card
+${(g.pressure || 70) >= 85 ? 'danger-live' : ''}
+"
+onclick="this.classList.toggle('expanded')">
 
       <div class="live-top">
         <span class="league-name">${g.league}</span>
