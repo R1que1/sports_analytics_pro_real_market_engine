@@ -1394,3 +1394,141 @@ nav a{
     );
 
 }
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+
+    radial-gradient(
+        circle at 20% 20%,
+        rgba(139,44,255,.12),
+        transparent 28%
+    ),
+
+    radial-gradient(
+        circle at 80% 30%,
+        rgba(0,255,153,.08),
+        transparent 24%
+    ),
+
+    radial-gradient(
+        circle at 50% 80%,
+        rgba(0,140,255,.08),
+        transparent 30%
+    );
+
+    z-index:-2;
+
+    animation:bgMove 18s ease infinite alternate;
+
+}
+
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    linear-gradient(
+        180deg,
+        rgba(5,5,11,.35),
+        rgba(5,5,11,.75)
+    );
+
+    z-index:-1;
+
+}
+
+@keyframes bgMove{
+
+    0%{
+        transform:
+        scale(1)
+        translate(0,0);
+    }
+
+    100%{
+        transform:
+        scale(1.08)
+        translate(-20px,-15px);
+    }
+
+}
+
+/* ===================================
+SCROLLBAR PREMIUM
+=================================== */
+
+::-webkit-scrollbar{
+    width:10px;
+    height:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#090912;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:
+    linear-gradient(
+        180deg,
+        #8b2cff,
+        #c037ff
+    );
+
+    border-radius:999px;
+
+    border:2px solid #090912;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:
+    linear-gradient(
+        180deg,
+        #a855ff,
+        #d946ef
+    );
+
+}
+
+/* ===================================
+SELEÇÃO PREMIUM
+=================================== */
+
+::selection{
+
+    background:
+    rgba(139,44,255,.35);
+
+    color:#ffffff;
+
+}
+
+::-moz-selection{
+
+    background:
+    rgba(139,44,255,.35);
+
+    color:#ffffff;
+
+}
+
+/* ===================================
+SMOOTH SCROLL
+=================================== */
+
+html{
+    scroll-behavior:smooth;
+}
