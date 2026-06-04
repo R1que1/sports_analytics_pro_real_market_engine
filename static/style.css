@@ -504,3 +504,41 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
     opacity:1;
     margin-top:18px;
 }
+
+.live-system-status{
+
+    margin-left:14px;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:12px;
+    font-weight:700;
+
+    color:#00ff99;
+
+    background:rgba(0,255,153,.08);
+
+    border:1px solid rgba(0,255,153,.18);
+
+    box-shadow:
+        0 0 18px rgba(0,255,153,.12);
+
+    animation:livePulse 2s infinite;
+}
+
+@keyframes livePulse{
+
+    0%{
+        opacity:.7;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:.7;
+    }
+}
