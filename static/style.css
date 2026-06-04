@@ -1655,3 +1655,59 @@ PREMIUM LINKS
     width:100%;
 
 }
+
+.card,
+.live-card,
+.hero-premium{
+    position:relative;
+}
+
+.card::before,
+.live-card::before,
+.hero-premium::before{
+    pointer-events:none;
+}
+
+.live-card{
+    overflow:hidden;
+}
+
+.live-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:18px;
+    padding:1px;
+    background:linear-gradient(
+        120deg,
+        rgba(139,44,255,.55),
+        rgba(0,255,153,.28),
+        rgba(255,0,234,.35),
+        rgba(139,44,255,.55)
+    );
+    background-size:300% 300%;
+    animation:borderFlow 7s ease infinite;
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    opacity:.35;
+}
+
+.live-card:hover::before,
+.live-card.expanded::before{
+    opacity:.8;
+}
+
+@keyframes borderFlow{
+    0%{
+        background-position:0% 50%;
+    }
+    50%{
+        background-position:100% 50%;
+    }
+    100%{
+        background-position:0% 50%;
+    }
+}
