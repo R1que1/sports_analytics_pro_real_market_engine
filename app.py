@@ -448,7 +448,7 @@ def api_live():
 
     if LIVE_CACHE["time"] and LIVE_CACHE["data"]:
         segundos = (agora - LIVE_CACHE["time"]).total_seconds()
-        if segundos < 60:
+        if segundos < 120:
             return jsonify(LIVE_CACHE["data"])
 
     games = []

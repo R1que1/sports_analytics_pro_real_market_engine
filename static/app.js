@@ -400,8 +400,8 @@ async function renderExtraCharts(){
 }
 
 boot();
-setInterval(loadLive, 15000);
-setInterval(loadAlerts, 15000);
+setInterval(loadLiveGames, 120000);
+(loadAlerts, 15000);
 
 
 async function loadRadar(){
