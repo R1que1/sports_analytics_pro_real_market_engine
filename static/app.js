@@ -292,32 +292,13 @@ ${g.xg || 1.45}</b>
 
 <div class="ia-reading">
 
-${(g.pressure || 70) >= 90
-? `🧠 ${g.home} domina completamente o jogo.
+🧠 ${g.aiAnalysis || "IA analisando o jogo em tempo real."}
 
-IA detecta pressão ofensiva extrema,
-volume alto de ataque e chance
-muito elevada de próximo gol.`
+🎯 Mercado sugerido:
+${g.recommendedMarket || "Over 1.5 gols"}
 
-: (g.pressure || 70) >= 80
-
-? `🧠 ${g.home} controla o momentum da partida.
-
-IA identifica intensidade ofensiva,
-crescimento de finalizações e forte
-pressão territorial.`
-
-: (g.pressure || 70) >= 70
-
-? `🧠 ${g.home} mantém superioridade ofensiva.
-
-A IA vê oportunidades interessantes
-para mercados ao vivo.`
-
-: `🧠 Jogo equilibrado no momento.
-
-IA detecta menor intensidade ofensiva
-e ritmo controlado.`}
+📊 Confiança:
+${g.marketConfidence || 78}%
 
 </div>
 

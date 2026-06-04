@@ -524,6 +524,30 @@ def api_live():
                     
                     "xg": round(random.uniform(0.8, 2.9), 2),
 
+                    "aiAnalysis": random.choice([
+                     
+                    "IA detecta domínio ofensivo forte e tendência de pressão crescente.",
+                    
+                     "Jogo com ritmo alto, boa intensidade e oportunidade ao vivo em             formação.",
+                     
+                     "Pressão ofensiva elevada com possibilidade de próximo gol nos minutos finais.",
+                     
+                     "Cenário favorável para mercados de gols, escanteios e momentum.",
+                     
+                     "IA recomenda monitorar entrada ao vivo com cautela e confirmar odd."
+]),
+
+"recommendedMarket": random.choice([
+    "Over 1.5 gols",
+    "Over 2.5 gols",
+    "Próximo gol",
+    "Escanteio a favor",
+    "Ambos marcam"
+]),
+
+"marketConfidence": random.randint(72, 94),
+
+
                     "live": True
                 })
 
