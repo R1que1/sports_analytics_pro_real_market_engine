@@ -434,13 +434,6 @@ def api_logout():
     return jsonify({"ok": True})
 
 
-LIVE_CACHE = {
-    "time": None,
-    "data": None
-}
-
-@app.route("/api/live")
-def api_live():
 
 LIVE_CACHE = {
     "time": None,
