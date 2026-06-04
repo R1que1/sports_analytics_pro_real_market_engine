@@ -448,7 +448,7 @@ def api_live():
 
     if LIVE_CACHE["time"] and LIVE_CACHE["data"]:
         segundos = (agora - LIVE_CACHE["time"]).total_seconds()
-        if segundos < 120:
+        if segundos < 180:
             return jsonify(LIVE_CACHE["data"])
 
     games = []
@@ -566,10 +566,12 @@ def api_live():
         ]
 
     resposta = {
-        "source": "api-football" if API_FOOTBALL_KEY else "demo-sem-chave",
-        "cached": False,
-        "games": games
-    }
+    "source": "api-football" if API_FOOTBALL_KEY else "demo-sem-chave",
+    "cached": False,
+    "cache_seconds": 180,
+    "api_protection": True,
+    "games": games
+}
 
     LIVE_CACHE["time"] = agora
     LIVE_CACHE["data"] = resposta
