@@ -135,7 +135,22 @@ if(liveStatus){
 
   const html = games.map(g => matchCard(g)).join("");
   document.getElementById("livePreview").innerHTML = games.slice(0,3).map(g => matchCard(g)).join("");
-  document.getElementById("allGames").innerHTML = html;
+  const gamesContainer =
+document.getElementById("allGames");
+
+gamesContainer.innerHTML = html;
+
+document
+.querySelectorAll(".live-card")
+.forEach(card => {
+
+    card.classList.add("updated");
+
+    setTimeout(() => {
+        card.classList.remove("updated");
+    }, 1200);
+
+});
 }
 
 function logoOrBall(url){
