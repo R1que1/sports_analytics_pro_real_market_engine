@@ -442,22 +442,26 @@ LIVE_CACHE = {
 @app.route("/api/live")
 def api_live():
 
+LIVE_CACHE = {
+    "time": None,
+    "data": None
+}
+
+@app.route("/api/live")
+def api_live():
     global LIVE_CACHE
 
     agora = datetime.datetime.now()
 
     if LIVE_CACHE["time"] and LIVE_CACHE["data"]:
         segundos = (agora - LIVE_CACHE["time"]).total_seconds()
-
         if segundos < 60:
             return jsonify(LIVE_CACHE["data"])
 
     games = []
 
     if API_FOOTBALL_KEY:
-
         try:
-
             today = datetime.date.today().isoformat()
 
             url = "https://v3.football.api-sports.io/fixtures"
@@ -472,144 +476,99 @@ def api_live():
                 "status": "NS-1H-HT-2H-ET-BT-P"
             }
 
-            r = requests.get(
-                url,
-                headers=headers,
-                params=params,
-                timeout=10
-            )
-
+            r = requests.get(url, headers=headers, params=params, timeout=10)
             data = r.json()
-
             fixtures = data.get("response", [])
 
             for item in fixtures[:20]:
-
                 fixture = item.get("fixture", {})
                 teams = item.get("teams", {})
                 goals = item.get("goals", {})
                 league = item.get("league", {})
 
                 games.append({
+                    "league": league.get("name"),
+                    "minute": fixture.get("status", {}).get("elapsed", 0),
+                    "status": fixture.get("status", {}).get("short", "NS"),
 
-    "league": league.get("name"),
+                    "home": teams.get("home", {}).get("name"),
+                    "away": teams.get("away", {}).get("name"),
 
-    "minute": fixture.get("status", {}).get("elapsed", 0),
+                    "homeLogo": teams.get("home", {}).get("logo"),
+                    "awayLogo": teams.get("away", {}).get("logo"),
 
-    "status": fixture.get("status", {}).get("short", "NS"),
+                    "homeGoals": goals.get("home", 0),
+                    "awayGoals": goals.get("away", 0),
 
-    "home": teams.get("home", {}).get("name"),
+                    "home_stats": {
+                        "possession": random.randint(48, 67),
+                        "shots": random.randint(5, 18),
+                        "shots_on_goal": random.randint(2, 9),
+                        "corners": random.randint(1, 10),
+                        "dangerous_attacks": random.randint(18, 72)
+                    },
 
-    "away": teams.get("away", {}).get("name"),
+                    "away_stats": {
+                        "possession": random.randint(33, 52),
+                        "shots": random.randint(3, 14),
+                        "shots_on_goal": random.randint(1, 7),
+                        "corners": random.randint(1, 8),
+                        "dangerous_attacks": random.randint(12, 58)
+                    },
 
-    "homeLogo": teams.get("home", {}).get("logo"),
+                    "aiAnalysis": random.choice([
+                        "IA detecta pressão ofensiva crescente.",
+                        "Mercado de gols apresenta valor.",
+                        "Time mandante domina ações ofensivas.",
+                        "Volume ofensivo elevado nos últimos minutos.",
+                        "Partida favorável para entradas ao vivo."
+                    ]),
 
-    "awayLogo": teams.get("away", {}).get("logo"),
+                    "recommendedMarket": random.choice([
+                        "Over 1.5 gols",
+                        "Over 2.5 gols",
+                        "Ambos marcam",
+                        "Próximo gol",
+                        "Escanteios ao vivo"
+                    ]),
 
-    "homeGoals": goals.get("home", 0),
-
-    "awayGoals": goals.get("away", 0),
-
-    # =========================
-    # ESTATÍSTICAS PREMIUM
-    # =========================
-
-    "home_stats": {
-
-        "possession": random.randint(48, 67),
-
-        "shots": random.randint(5, 18),
-
-        "shots_on_goal": random.randint(2, 9),
-
-        "corners": random.randint(1, 10),
-
-        "dangerous_attacks": random.randint(18, 72)
-
-    },
-
-    "away_stats": {
-
-        "possession": random.randint(33, 52),
-
-        "shots": random.randint(3, 14),
-
-        "shots_on_goal": random.randint(1, 7),
-
-        "corners": random.randint(1, 8),
-
-        "dangerous_attacks": random.randint(12, 58)
-
-    },
-
-    # =========================
-    # IA PREMIUM
-    # =========================
-
-    "aiAnalysis": random.choice([
-
-        "IA detecta pressão ofensiva crescente.",
-
-        "Mercado de gols apresenta valor.",
-
-        "Time mandante domina ações ofensivas.",
-
-        "Volume ofensivo elevado nos últimos minutos.",
-
-        "Partida favorável para entradas ao vivo."
-
-    ]),
-
-    "recommendedMarket": random.choice([
-
-        "Over 1.5 gols",
-
-        "Over 2.5 gols",
-
-        "Ambos marcam",
-
-        "Próximo gol",
-
-        "Escanteios ao vivo"
-
-    ]),
-
-    "marketConfidence": random.randint(72, 94),
-
-    "live": True
-})
-
-"recommendedMarket": random.choice([
-    "Over 1.5 gols",
-    "Over 2.5 gols",
-    "Próximo gol",
-    "Escanteio a favor",
-    "Ambos marcam"
-]),
-
-"marketConfidence": random.randint(72, 94),
-
-
+                    "marketConfidence": random.randint(72, 94),
                     "live": True
                 })
 
         except Exception as e:
-
             print("ERRO API LIVE:", e)
 
     if not games:
-
         games = [
             {
-                "league":"Champions League",
-                "minute":67,
-                "status":"2H",
-                "home":"Manchester City",
-                "away":"Real Madrid",
-                "homeGoals":2,
-                "awayGoals":1,
-                "pressure":88,
-                "live":True
+                "league": "Champions League",
+                "minute": 67,
+                "status": "2H",
+                "home": "Manchester City",
+                "away": "Real Madrid",
+                "homeGoals": 2,
+                "awayGoals": 1,
+                "homeLogo": "",
+                "awayLogo": "",
+                "home_stats": {
+                    "possession": 61,
+                    "shots": 14,
+                    "shots_on_goal": 8,
+                    "corners": 6,
+                    "dangerous_attacks": 42
+                },
+                "away_stats": {
+                    "possession": 39,
+                    "shots": 7,
+                    "shots_on_goal": 2,
+                    "corners": 3,
+                    "dangerous_attacks": 21
+                },
+                "aiAnalysis": "IA detecta domínio ofensivo forte e tendência de pressão crescente.",
+                "recommendedMarket": "Over 1.5 gols",
+                "marketConfidence": 87,
+                "live": True
             }
         ]
 
