@@ -1711,3 +1711,45 @@ PREMIUM LINKS
         background-position:0% 50%;
     }
 }
+
+.plan{
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(139,44,255,.25);
+}
+
+.plan::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at top right,rgba(139,44,255,.18),transparent 40%);
+    pointer-events:none;
+}
+
+.plan h1{
+    text-shadow:0 0 25px rgba(139,44,255,.35);
+}
+
+.plan.premium{
+    border-color:rgba(0,255,153,.22);
+    box-shadow:
+    0 0 45px rgba(0,255,153,.08),
+    0 0 60px rgba(139,44,255,.12);
+}
+
+.pix-code{
+    font-family:monospace;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.pix-trust{
+    margin-top:14px;
+    padding:12px;
+    border-radius:14px;
+    background:rgba(0,255,153,.07);
+    border:1px solid rgba(0,255,153,.16);
+    color:#00ff99;
+    font-size:13px;
+    font-weight:700;
+}
