@@ -2164,3 +2164,80 @@ DASHBOARD FINAL TESTADO — STATS AO LADO DO DESEMPENHO
         margin-top:18px;
     }
 }
+
+
+/* =====================================================
+   CORREÇÃO FINAL — VOLTAR DASHBOARD AO LAYOUT DO COMEÇO
+   Mantém somente 3 blocos alinhados:
+   Jogos ao Vivo | Previsões IA | Desempenho da IA
+   ===================================================== */
+#dashboard.page.active{
+    display:block !important;
+}
+
+#dashboard > .grid.dashboard-clean-grid{
+    display:grid !important;
+    grid-template-columns:minmax(300px,1fr) minmax(430px,1.28fr) minmax(330px,1.05fr) !important;
+    gap:18px !important;
+    align-items:start !important;
+    width:100% !important;
+}
+
+#dashboard > .grid.dashboard-clean-grid > .card{
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    height:auto !important;
+}
+
+#dashboard .grid-bottom,
+#dashboard > .grid-bottom,
+#dashboard .dashboard-hidden-stats{
+    display:none !important;
+}
+
+#dashboard .card{
+    padding:18px !important;
+    border-radius:16px !important;
+}
+
+#dashboard .card-title{
+    margin-bottom:16px !important;
+}
+
+#dashboard .chart{
+    display:block !important;
+    height:180px !important;
+}
+
+#dashboard .side-metrics{
+    display:grid !important;
+    grid-template-columns:1fr 1.6fr !important;
+    gap:14px !important;
+}
+
+#dashboard .mini-card{
+    display:none !important;
+}
+
+#dashboard .mini-stats{
+    grid-template-columns:repeat(4,1fr) !important;
+}
+
+@media(max-width:1350px){
+    #dashboard > .grid.dashboard-clean-grid{
+        grid-template-columns:1fr 1fr !important;
+    }
+    #dashboard > .grid.dashboard-clean-grid > .card:nth-child(3){
+        grid-column:1 / -1 !important;
+    }
+}
+
+@media(max-width:900px){
+    #dashboard > .grid.dashboard-clean-grid{
+        grid-template-columns:1fr !important;
+    }
+    #dashboard .side-metrics{
+        grid-template-columns:1fr !important;
+    }
+}
