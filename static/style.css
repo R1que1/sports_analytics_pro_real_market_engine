@@ -1336,3 +1336,61 @@ nav a{
     text-shadow:
     0 0 28px rgba(139,44,255,.22);
 }
+
+.card,
+.live-card,
+.hero-metric,
+.metric-box,
+.quick,
+.stat-item,
+.ai-box{
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,255,255,.05),
+        rgba(255,255,255,.025)
+    );
+
+}
+
+.live-card{
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+}
+
+.hero-premium{
+
+    backdrop-filter:blur(24px);
+
+    -webkit-backdrop-filter:blur(24px);
+
+}
+
+.hero-metric{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,255,255,.07),
+        rgba(255,255,255,.03)
+    );
+
+}
+
+.ai-box{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(139,44,255,.12),
+        rgba(0,255,153,.05)
+    );
+
+}
