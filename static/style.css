@@ -1905,3 +1905,134 @@ nav a{
 .upgrade{
     padding:14px;
 }
+
+/* ===================================
+DASHBOARD FINAL BALANCE FIX
+=================================== */
+
+.app{
+    grid-template-columns:230px 1fr;
+}
+
+aside{
+    width:230px;
+    padding:16px;
+}
+
+main{
+    padding:18px 22px;
+}
+
+.hero-premium{
+    grid-template-columns:1fr;
+    padding:22px 26px;
+    min-height:auto;
+}
+
+.hero-right{
+    grid-template-columns:repeat(4,1fr);
+    margin-top:18px;
+}
+
+.hero-metric{
+    padding:14px 16px;
+    min-height:74px;
+}
+
+.hero-metric h2{
+    font-size:24px;
+}
+
+.hero-left h1{
+    font-size:36px;
+}
+
+.hero-left p{
+    max-width:760px;
+}
+
+/* dashboard principal mais limpo */
+.grid{
+    grid-template-columns:1fr 1.15fr .9fr;
+    gap:16px;
+}
+
+.grid > .card:nth-child(n+4){
+    display:none;
+}
+
+/* esconde blocos laterais que estão deixando tudo apertado */
+.grid-bottom{
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+.card{
+    min-width:0;
+}
+
+.live-card{
+    max-height:none;
+}
+
+.score-live{
+    font-size:28px;
+    min-width:72px;
+}
+
+.team-live{
+    width:82px;
+}
+
+.team-live span{
+    font-size:11px;
+}
+
+.team-logo{
+    width:34px;
+    height:34px;
+}
+
+.ai-box{
+    margin-top:10px;
+}
+
+.live-card::after{
+    font-size:10px;
+}
+
+table{
+    font-size:11px;
+}
+
+td{
+    padding:8px 5px;
+}
+
+th{
+    padding:8px 5px;
+}
+
+.mini-stats{
+    grid-template-columns:repeat(4,1fr);
+}
+
+.mini-stats h3{
+    font-size:18px;
+}
+
+.side-metrics{
+    grid-template-columns:1fr;
+}
+
+.chart{
+    display:none;
+}
+
+.metric-box{
+    padding:12px;
+}
+
+.metric-box h3{
+    font-size:22px;
+}
