@@ -457,8 +457,8 @@ async function renderExtraCharts(){
 }
 
 boot();
-setInterval(loadLive, 60000);
-setInterval(loadAlerts, 60000);
+setInterval(loadLive, 15000);
+setInterval(loadAlerts, 15000);
 
 
 async function loadRadar(){
