@@ -1753,3 +1753,155 @@ PREMIUM LINKS
     font-size:13px;
     font-weight:700;
 }
+
+/* ===================================
+COMPACT MODE — REDUZIR SCROLL
+=================================== */
+
+main{
+    padding:20px;
+}
+
+header{
+    margin-bottom:18px;
+}
+
+.hero-premium{
+    padding:24px 28px;
+    margin-bottom:20px;
+    min-height:220px;
+}
+
+.hero-left h1{
+    font-size:40px;
+    margin-bottom:12px;
+}
+
+.hero-left p{
+    font-size:13px;
+    line-height:1.55;
+}
+
+.hero-badge{
+    padding:8px 14px;
+    margin-bottom:14px;
+}
+
+.hero-right{
+    gap:12px;
+}
+
+.hero-metric{
+    padding:18px;
+    min-height:92px;
+}
+
+.hero-metric h2{
+    font-size:28px;
+    margin-top:8px;
+}
+
+.card{
+    padding:16px;
+    border-radius:14px;
+}
+
+.card-title{
+    margin-bottom:14px;
+}
+
+.card-title h2{
+    font-size:18px;
+}
+
+.tabs{
+    margin-bottom:10px;
+}
+
+.tabs span{
+    padding:9px 2px;
+    font-size:12px;
+}
+
+.live-card{
+    padding:14px;
+    margin-bottom:12px;
+    border-radius:16px;
+}
+
+.team-logo{
+    width:38px;
+    height:38px;
+}
+
+.score-live{
+    font-size:30px;
+}
+
+.ai-box{
+    padding:10px;
+}
+
+.ai-analysis{
+    font-size:11px;
+    line-height:1.4;
+}
+
+.mini-stats{
+    margin-top:12px;
+    padding:10px;
+}
+
+.mini-stats h3{
+    font-size:20px;
+}
+
+.metric-box{
+    padding:13px;
+    margin-bottom:10px;
+}
+
+.metric-box h3{
+    font-size:24px;
+}
+
+.quick{
+    padding:13px;
+}
+
+.quick h3{
+    font-size:24px;
+}
+
+.chart{
+    height:150px;
+}
+
+table{
+    font-size:12px;
+}
+
+td{
+    padding:10px 6px;
+}
+
+th{
+    padding:9px 6px;
+}
+
+aside{
+    padding:18px;
+}
+
+nav a{
+    padding:10px 12px;
+    margin-bottom:4px;
+}
+
+.logo{
+    margin-bottom:22px;
+}
+
+.upgrade{
+    padding:14px;
+}
