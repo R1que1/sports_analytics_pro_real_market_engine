@@ -1167,3 +1167,85 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
     }
 
 }
+
+.live-card{
+    padding:18px;
+    border-radius:18px;
+    margin-bottom:16px;
+}
+
+.live-top{
+    margin-bottom:10px;
+}
+
+.league-name{
+    font-size:12px;
+}
+
+.status-live{
+    font-size:11px;
+    padding:4px 9px;
+}
+
+.teams-live{
+    gap:10px;
+}
+
+.team-live{
+    width:95px;
+    gap:6px;
+}
+
+.team-live span{
+    font-size:13px;
+}
+
+.team-logo{
+    width:46px;
+    height:46px;
+}
+
+.score-live{
+    font-size:34px;
+    min-width:90px;
+}
+
+.ai-box{
+    padding:12px;
+    margin-top:12px;
+}
+
+.ai-title{
+    font-size:13px;
+}
+
+.ai-analysis{
+    font-size:12px;
+}
+
+.market-tag{
+    font-size:11px;
+    padding:6px 10px;
+}
+
+.stats-grid{
+    grid-template-columns:repeat(5,1fr);
+    gap:8px;
+}
+
+.stat-item{
+    padding:9px;
+}
+
+.stat-item span{
+    font-size:11px;
+}
+
+.stat-item strong{
+    font-size:16px;
+}
+
+.live-card::after{
+    font-size:11px;
+    margin-top:10px;
+}
