@@ -13,7 +13,23 @@ nav a{display:flex;align-items:center;gap:14px;color:#c8c2d8;text-decoration:non
 .btn{border:0;width:100%;background:linear-gradient(90deg,#812cff,#c037ff);color:white;padding:14px;border-radius:9px;font-weight:800;cursor:pointer;margin-top:16px}.btn.ghost{background:#111120;border:1px solid var(--line)}.small-btn{width:auto;padding:11px 18px;margin-top:0}
 main{padding:26px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.top-left{display:flex;align-items:center;gap:35px}.hamb{font-size:22px;color:#ddd;cursor:pointer}.vip{background:#9b2cff;padding:6px 12px;border-radius:7px;font-size:13px;font-weight:900;margin-left:8px}.top-icons{display:flex;align-items:center;gap:22px}.avatar{width:42px;height:42px;border-radius:50%;background:#2b2632;display:grid;place-items:center}
 .page{display:none;animation:fade .25s ease}.page.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.grid{display:grid;grid-template-columns:1fr 1.25fr 1.1fr;gap:18px}.grid-bottom{display:grid;grid-template-columns:1.1fr 1.1fr .85fr 1.1fr;gap:18px;margin-top:22px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid{
+    display:grid;
+
+    grid-template-columns:
+    1.05fr
+    1fr
+    .62fr
+    .9fr;
+
+    gap:18px;
+
+    align-items:start;
+}..grid-bottom{
+    display:none;
+}.grid-bottom{
+    display:none;
+}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .card{background:rgba(12,12,24,.9);border:1px solid var(--line);border-radius:15px;padding:18px;box-shadow:0 0 35px #0008}.mini-card{margin-top:18px;padding:14px}.card-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}.card-title h2{font-size:20px;display:flex;gap:10px;align-items:center}.card-title i{color:var(--purple2)}
 .pill{border:1px solid #3a1760;background:#13091f;color:#ddb5ff;padding:8px 14px;border-radius:8px;font-size:13px;white-space:nowrap}.tabs{display:flex;gap:18px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow:auto}.tabs span{padding:12px 3px;color:#c6bfd4;font-size:13px;white-space:nowrap}.tabs .on{color:white;border-bottom:3px solid var(--purple2)}
 .match,.box{background:linear-gradient(180deg,#10101d,#0a0a13);border:1px solid #211536;border-radius:12px;padding:15px;margin-bottom:12px}.league{color:#9f98b3;font-size:12px;margin-bottom:10px}.team{display:grid;grid-template-columns:34px 1fr 30px;align-items:center;margin:8px 0;font-weight:800}.badge-img{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#6bb8ff,#fff);object-fit:cover}
