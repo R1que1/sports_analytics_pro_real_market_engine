@@ -1947,3 +1947,142 @@ aside{
     display:block;
 }
 
+/* ===================================
+DASHBOARD PREMIUM ESTAVEL — CORREÇÃO FINAL
+Coloca Estatísticas Rápidas na mesma linha do Desempenho da IA
+sem quebrar o visual premium.
+=================================== */
+
+#dashboard.page.active{
+    display:grid;
+    grid-template-columns:repeat(12,minmax(0,1fr));
+    gap:18px;
+    align-items:start;
+}
+
+/* Hero ocupa a linha inteira */
+#dashboard .hero-premium{
+    grid-column:1 / -1;
+}
+
+/* Transforma os wrappers em grid único sem mexer no HTML */
+#dashboard > .grid,
+#dashboard > .grid-bottom{
+    display:contents;
+}
+
+/* Linha principal: Jogos | Previsões | Desempenho | Estatísticas */
+#dashboard > .grid > .card:nth-child(1){
+    grid-column:span 3;
+}
+
+#dashboard > .grid > .card:nth-child(2){
+    grid-column:span 4;
+}
+
+#dashboard > .grid > .card:nth-child(3){
+    grid-column:span 3;
+}
+
+#dashboard > .grid-bottom > .card:nth-child(1){
+    grid-column:span 2;
+}
+
+/* Cards inferiores restantes, caso existam */
+#dashboard > .grid-bottom > .card:nth-child(n+2){
+    grid-column:span 4;
+}
+
+/* Evita cards estourando lateralmente */
+#dashboard .card{
+    min-width:0;
+    height:100%;
+}
+
+/* Compactação leve dos cards principais */
+#dashboard .card-title{
+    margin-bottom:12px;
+}
+
+#dashboard .card-title h2{
+    font-size:17px;
+}
+
+#dashboard .tabs span{
+    font-size:11px;
+    padding:8px 2px;
+}
+
+#dashboard table{
+    font-size:11px;
+}
+
+#dashboard td{
+    padding:8px 5px;
+}
+
+#dashboard th{
+    padding:8px 5px;
+}
+
+/* Estatísticas Rápidas fica compacta na lateral */
+#dashboard > .grid-bottom > .card:nth-child(1) .quick-grid{
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+#dashboard > .grid-bottom > .card:nth-child(1) .quick{
+    padding:11px;
+}
+
+#dashboard > .grid-bottom > .card:nth-child(1) .quick h3{
+    font-size:22px;
+}
+
+/* Desempenho mais estável */
+#dashboard .side-metrics{
+    grid-template-columns:1fr;
+}
+
+#dashboard .chart{
+    height:120px;
+}
+
+/* Desktop menor */
+@media(max-width:1450px){
+    #dashboard.page.active{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    #dashboard .hero-premium{
+        grid-column:1 / -1;
+    }
+
+    #dashboard > .grid > .card:nth-child(1),
+    #dashboard > .grid > .card:nth-child(2),
+    #dashboard > .grid > .card:nth-child(3),
+    #dashboard > .grid-bottom > .card:nth-child(1),
+    #dashboard > .grid-bottom > .card:nth-child(n+2){
+        grid-column:span 1;
+    }
+}
+
+/* Mobile */
+@media(max-width:900px){
+    #dashboard.page.active{
+        grid-template-columns:1fr;
+    }
+
+    #dashboard .hero-premium,
+    #dashboard > .grid > .card:nth-child(1),
+    #dashboard > .grid > .card:nth-child(2),
+    #dashboard > .grid > .card:nth-child(3),
+    #dashboard > .grid-bottom > .card:nth-child(1),
+    #dashboard > .grid-bottom > .card:nth-child(n+2){
+        grid-column:1 / -1;
+    }
+
+    #dashboard > .grid-bottom > .card:nth-child(1) .quick-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
