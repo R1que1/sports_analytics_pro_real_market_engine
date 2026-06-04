@@ -1532,3 +1532,126 @@ SMOOTH SCROLL
 html{
     scroll-behavior:smooth;
 }
+
+/* ===================================
+PREMIUM BUTTONS
+=================================== */
+
+.btn{
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+
+}
+
+.btn:hover{
+
+    transform:
+    translateY(-2px)
+    scale(1.01);
+
+    box-shadow:
+    0 0 30px rgba(139,44,255,.35);
+
+}
+
+.btn::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-120%;
+
+    width:120%;
+    height:100%;
+
+    background:
+    linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.22),
+        transparent
+    );
+
+    transition:.7s ease;
+
+}
+
+.btn:hover::before{
+
+    left:120%;
+
+}
+
+.btn:active{
+
+    transform:
+    scale(.98);
+
+}
+
+/* ===================================
+PREMIUM LINKS
+=================================== */
+
+.link{
+
+    position:relative;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#b388ff;
+
+    font-weight:700;
+
+    transition:.25s ease;
+
+}
+
+.link:hover{
+
+    color:#ffffff;
+
+    transform:translateX(4px);
+
+}
+
+.link::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    bottom:-4px;
+
+    width:0;
+    height:2px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #8b2cff,
+        #c037ff
+    );
+
+    transition:.3s ease;
+
+}
+
+.link:hover::after{
+
+    width:100%;
+
+}
