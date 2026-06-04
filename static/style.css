@@ -1249,3 +1249,90 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{color:#8f87a0;font-s
     font-size:11px;
     margin-top:10px;
 }
+
+aside{
+    width:260px;
+    padding:22px;
+}
+
+nav a{
+    padding:12px 14px;
+    margin-bottom:6px;
+    font-size:14px;
+    border-radius:12px;
+}
+
+.logo{
+    margin-bottom:28px;
+}
+
+.logo h1{
+    font-size:22px;
+}
+
+.logo span{
+    font-size:11px;
+}
+
+.shield{
+    width:48px;
+    height:56px;
+    font-size:22px;
+}
+
+.upgrade{
+    padding:16px;
+    margin-top:20px;
+}
+
+.upgrade h3{
+    font-size:20px;
+}
+
+.upgrade p{
+    font-size:12px;
+    margin:9px 0;
+}
+
+.app{
+    grid-template-columns:260px 1fr;
+}
+
+.hero-premium::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+    linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255,255,255,.04) 45%,
+        transparent 70%
+    );
+    transform:translateX(-100%);
+    animation:heroShine 6s ease infinite;
+    pointer-events:none;
+}
+
+@keyframes heroShine{
+    0%{
+        transform:translateX(-100%);
+    }
+    55%{
+        transform:translateX(120%);
+    }
+    100%{
+        transform:translateX(120%);
+    }
+}
+
+.hero-badge{
+    box-shadow:
+    0 0 18px rgba(0,255,153,.18),
+    inset 0 0 12px rgba(0,255,153,.08);
+}
+
+.hero-left h1{
+    text-shadow:
+    0 0 28px rgba(139,44,255,.22);
+}
