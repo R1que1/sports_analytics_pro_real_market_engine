@@ -116,6 +116,12 @@ async function loadLive(){
   const games = data.games || [];
   document.getElementById("liveCount").innerText = games.filter(g=>g.live).length + " AO VIVO";
 
+const liveStatus = document.getElementById("liveUpdateStatus");
+
+if(liveStatus){
+  liveStatus.innerText = "⚡ Realtime atualizado " + new Date().toLocaleTimeString("pt-BR");
+}
+
   const html = games.map(g => matchCard(g)).join("");
   document.getElementById("livePreview").innerHTML = games.slice(0,3).map(g => matchCard(g)).join("");
   document.getElementById("allGames").innerHTML = html;
