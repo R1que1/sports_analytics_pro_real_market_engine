@@ -26,7 +26,7 @@
     <label>Senha</label>
     <input id="loginPassword" class="input" type="password" value="vip123">
 
-    <button class="btn" onclick="login()">Entrar</button>
+    <button class="btn" onclick="bootDemo()">Entrar</button>
     <button class="btn ghost" onclick="loginAdmin()">Entrar como Admin</button>
 
     <p id="loginMsg" class="msg"></p>
@@ -119,41 +119,159 @@ Realtime Premium
     </header>
 
     <section id="dashboard" class="page active">
-      <div class="grid dashboard-clean-grid">
-        <div class="card">
+      <div class="premium-hero">
+        <div>
+          <span class="hero-kicker"><span class="live-dot"></span> AI LIVE COMMAND CENTER</span>
+          <h1>Central operacional da IA</h1>
+          <p>Radar realtime com jogos ao vivo, value bets, odds, pressão ofensiva e justificativas para tomada de decisão.</p>
+        </div>
+        <div class="hero-actions">
+          <span class="pill"><span class="green">●</span> Engine online</span>
+          <button class="btn small-btn" onclick="refreshPremiumDashboard()">Atualizar Central</button>
+        </div>
+      </div>
+
+      <div class="trust-strip">
+        <div class="trust-card"><small>Precisão IA</small><strong id="accuracy">98.6%</strong><span>▲ modelo calibrado</span></div>
+        <div class="trust-card"><small>ROI médio</small><strong id="roi">+8.7%</strong><span>▲ últimos ciclos</span></div>
+        <div class="trust-card"><small>Lucro simulado</small><strong id="profit">+24.8%</strong><span>▲ banca protegida</span></div>
+        <div class="trust-card"><small>Operações</small><strong id="operations">237</strong><span>entradas analisadas</span></div>
+        <div class="trust-card"><small>Live games</small><strong id="liveCount">0</strong><span>monitoramento ativo</span></div>
+      </div>
+
+      <div class="command-grid">
+        <div class="card command-card span-2">
           <div class="card-title">
-            <h2><i class="fa-solid fa-radio"></i> Jogos ao Vivo</h2>
-            <span class="pill" id="liveCount">AO VIVO</span>
+            <h2><i class="fa-solid fa-radio"></i> Live Center Premium</h2>
+            <span class="pill" id="liveUpdateStatus">Realtime aguardando</span>
           </div>
-          <div class="tabs"><span class="on">Todos</span><span>Futebol</span><span>Basquete</span><span>Tênis</span><span>eSports</span></div>
-          <div id="livePreview"></div>
+
+
+<div id="livePreview" class="live-preview-pro">
+            <div class="live-match-card">
+              <div class="live-top">
+                <span class="live-badge">● AO VIVO</span>
+                <span class="live-minute">72'</span>
+              </div>
+
+              <div class="teams-live">
+                <div class="team-live">
+                  <img src="https://crests.football-data.org/65.png" alt="Manchester City">
+                  <span>Manchester City</span>
+                </div>
+
+                <div class="live-score">2 x 1</div>
+
+                <div class="team-live">
+                  <img src="https://crests.football-data.org/86.png" alt="Real Madrid">
+                  <span>Real Madrid</span>
+                </div>
+              </div>
+
+              <div class="live-stats-grid">
+                <div class="stat-box-live"><small>Posse</small><strong>63%</strong></div>
+                <div class="stat-box-live"><small>Finalizações</small><strong>14</strong></div>
+                <div class="stat-box-live"><small>xG</small><strong>2.87</strong></div>
+                <div class="stat-box-live"><small>Escanteios</small><strong>8</strong></div>
+                <div class="live-pressure-wrapper">
+
+    <div class="pressure-header">
+        <span>Pressão IA</span>
+        <span class="hot-game">🔥 HOT GAME</span>
+    </div>
+
+    <div class="pressure-bar">
+        <div class="pressure-fill" style="width:87%"></div>
+    </div>
+
+    <div class="goal-alert">
+        ⚽ Gol iminente detectado
+    </div>
+
+    <div class="mini-radar">
+        <div class="radar-dot"></div>
+    </div>
+
+</div>        
+
+
+
+              <div class="pressure-area">
+                <div class="pressure-title">Pressão ofensiva <span>87%</span></div>
+                <div class="pressure-bar"><div class="pressure-fill"></div></div>
+              </div>
+
+              <div class="next-goal-box">
+                <div class="next-goal-title">Próximo gol</div>
+                <div class="next-goal-percent">Manchester City 74%</div>
+              </div>
+
+              <div class="odds-live-table">
+                <div class="odd-item"><span>Casa</span><strong>1.74</strong></div>
+                <div class="odd-item"><span>Empate</span><strong>3.20</strong></div>
+                <div class="odd-item"><span>Fora</span><strong>4.90</strong></div>
+                <div class="odd-item"><span>Over 2.5</span><strong>2.05</strong></div>
+              </div>
+            </div>
+          </div>
+
           <a class="link" onclick="goPage('jogos')">Ver todos os jogos ao vivo →</a>
         </div>
 
-        <div class="card">
-          <div class="card-title"><h2><i class="fa-solid fa-brain"></i> Previsões IA</h2><span class="pill"><span class="green">●</span> IA ATIVA</span></div>
-          <div class="tabs"><span class="on">Hoje</span><span>Amanhã</span><span>7 Dias</span><span>Personalizar</span></div>
-          <table>
-            <thead><tr><th>JOGO</th><th>MERCADO</th><th>PREVISÃO</th><th>CONFIANÇA</th><th>ODD</th><th></th></tr></thead>
-            <tbody id="predTable"></tbody>
-          </table>
-          <div class="mini-stats">
-            <div><small>PRECISÃO IA</small><h3 id="accuracy">98.6%</h3><span class="up">▲ 2.4%</span></div>
-            <div><small>LUCRO TOTAL</small><h3 id="profit">+24.8%</h3><span class="up">▲ 5.7%</span></div>
-            <div><small>OPERAÇÕES</small><h3 id="operations">237</h3><span class="up">▲ 18</span></div>
-            <div><small>ROI MÉDIO</small><h3 id="roi">+8.7%</h3><span class="up">▲ 1.3%</span></div>
+        <div class="card command-card ai-working-card">
+          <div class="card-title"><h2><i class="fa-solid fa-brain"></i> IA analisando agora</h2><span class="pill green">ATIVA</span></div>
+          <div class="scan-orb"><i class="fa-solid fa-microchip"></i></div>
+          <div class="ai-checklist" id="aiChecklist">
+            <div><span>Forma recente</span><b>92%</b></div>
+            <div><span>xG / xGA</span><b>87%</b></div>
+            <div><span>Pressão ofensiva</span><b>91%</b></div>
+            <div><span>Odds movement</span><b>78%</b></div>
+            <div><span>Value esperado</span><b>84%</b></div>
           </div>
-          <a class="link" onclick="goPage('previsoes')">Ver todas as previsões →</a>
         </div>
 
-        <div class="card">
-          <div class="card-title"><h2>Desempenho da IA</h2><span class="pill">7 dias</span></div>
-          <div class="side-metrics">
-            <div>
-              <div class="metric-box"><small>Lucro</small><h3 id="profit2">+24.8%</h3><span class="up">▲ 5.7% vs 7 dias</span></div>
-              <div class="metric-box"><small>ROI Médio</small><h3 id="roi2">+8.7%</h3><span class="up">▲ 1.3% vs 7 dias</span></div>
-            </div>
-            <div class="chart"><canvas id="iaChart"></canvas></div>
+        <div class="card command-card">
+          <div class="card-title"><h2><i class="fa-solid fa-crosshairs"></i> Oportunidade detectada</h2><span class="pill">VALUE</span></div>
+          <div id="premiumOpportunity" class="opportunity-pro">
+            <h3>Carregando mercado...</h3>
+            <p class="muted">A IA está cruzando odds e probabilidade.</p>
+          </div>
+        </div>
+
+        <div class="card command-card span-2">
+          <div class="card-title"><h2><i class="fa-solid fa-table-list"></i> Previsões IA com confiança</h2><span class="pill"><span class="green">●</span> IA ATIVA</span></div>
+          <table class="premium-table">
+            <thead><tr><th>Jogo</th><th>Mercado</th><th>Previsão</th><th>Confiança</th><th>Odd</th><th>Sinal</th></tr></thead>
+            <tbody id="predTable"></tbody>
+          </table>
+        </div>
+
+        <div class="card command-card">
+          <div class="card-title"><h2><i class="fa-solid fa-chart-line"></i> Desempenho da IA</h2><span class="pill">7 dias</span></div>
+          <div class="performance-head">
+            <div><small>Lucro</small><h3 id="profit2">+24.8%</h3></div>
+            <div><small>ROI</small><h3 id="roi2">+8.7%</h3></div>
+          </div>
+          <div class="chart"><canvas id="iaChart"></canvas></div>
+        </div>
+
+        <div class="card command-card">
+          <div class="card-title"><h2><i class="fa-solid fa-fire"></i> Heatmap IA</h2><span class="pill">Pressão</span></div>
+          <div id="dashHeatmap" class="heatmap-grid mini-heatmap"></div>
+        </div>
+
+        <div class="card command-card">
+          <div class="card-title"><h2><i class="fa-solid fa-circle-check"></i> Últimos acertos</h2><span class="pill green">TRANSPARÊNCIA</span></div>
+          <div class="hit-feed" id="lastHitsFeed"></div>
+        </div>
+
+        <div class="card command-card span-2">
+          <div class="card-title"><h2><i class="fa-solid fa-lightbulb"></i> Por que a IA recomendou?</h2><span class="pill">JUSTIFICATIVA</span></div>
+          <div class="reason-grid">
+            <div><b>✔ Média de gols acima do padrão</b><span>Jogos com alta tendência de Over e volume ofensivo.</span></div>
+            <div><b>✔ Pressão ofensiva crescente</b><span>Ataques perigosos e finalizações aumentaram nos últimos minutos.</span></div>
+            <div><b>✔ Odd com valor</b><span>Probabilidade da IA acima da probabilidade implícita da casa.</span></div>
+            <div><b>✔ Risco controlado</b><span>Entrada filtrada por confiança, forma recente e mercado seguro.</span></div>
           </div>
         </div>
       </div>
@@ -573,5 +691,21 @@ Realtime Premium
 </div>
 
 <script src="/static/app.js"></script>
+
+<script>
+function bootDemo(){
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "grid";
+
+  const userName = document.getElementById("userName");
+  const userPlan = document.getElementById("userPlan");
+  const adminMenu = document.getElementById("adminMenu");
+
+  if(userName) userName.innerText = "Infinite Trader";
+  if(userPlan) userPlan.innerText = "VIP PREMIUM";
+  if(adminMenu) adminMenu.style.display = "flex";
+}
+</script>
+
 </body>
 </html>

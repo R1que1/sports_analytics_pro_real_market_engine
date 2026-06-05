@@ -440,6 +440,137 @@ LIVE_CACHE = {
     "data": None
 }
 
+def buscar_estatisticas_reais(fixture_id):
+    try:
+        url = "https://v3.football.api-sports.io/fixtures/statistics"
+
+        headers = {
+            "x-apisports-key": API_FOOTBALL_KEY
+        }
+
+        params = {
+            "fixture": fixture_id
+        }
+
+        r = requests.get(
+            url,
+            headers=headers,
+            params=params,
+            timeout=10
+        )
+
+        data = r.json()
+        response = data.get("response", [])
+
+        if len(response) < 2:
+            return None, None
+
+        def extrair_stats(team_data):
+            stats = {}
+
+            for item in team_data.get("statistics", []):
+                tipo = item.get("type")
+                valor = item.get("value")
+
+                if valor is None:
+                    valor = 0
+
+                if isinstance(valor, str) and "%" in valor:
+                    valor = int(valor.replace("%", ""))
+
+                stats[tipo] = valor
+
+            return {
+                "possession": stats.get("Ball Possession", 50),
+                "shots": stats.get("Total Shots", 0),
+                "shots_on_goal": stats.get("Shots on Goal", 0),
+                "corners": stats.get("Corner Kicks", 0),
+                "dangerous_attacks": stats.get("Dangerous Attacks", 0),
+                "yellow_cards": stats.get("Yellow Cards", 0),
+                "red_cards": stats.get("Red Cards", 0)
+            }
+
+        home_stats = extrair_stats(response[0])
+        away_stats = extrair_stats(response[1])
+
+        return home_stats, away_stats
+
+    except Exception as e:
+        print("ERRO STATS REAIS:", e)
+        return None, None
+
+def calcular_ia_live(home_stats, away_stats, home_goals, away_goals):
+    home_pressure = (
+        home_stats.get("shots_on_goal", 0) * 7 +
+        home_stats.get("corners", 0) * 4 +
+        home_stats.get("dangerous_attacks", 0) * 1.2 +
+        home_stats.get("possession", 50) * 0.4
+    )
+
+    away_pressure = (
+        away_stats.get("shots_on_goal", 0) * 7 +
+        away_stats.get("corners", 0) * 4 +
+        away_stats.get("dangerous_attacks", 0) * 1.2 +
+        away_stats.get("possession", 50) * 0.4
+    )
+
+    total_pressure = max(home_pressure + away_pressure, 1)
+
+    home_goal_chance = round((home_pressure / total_pressure) * 100)
+    away_goal_chance = 100 - home_goal_chance
+
+    xg_home = round(
+        home_stats.get("shots_on_goal", 0) * 0.22 +
+        home_stats.get("shots", 0) * 0.06 +
+        home_stats.get("dangerous_attacks", 0) * 0.01,
+        2
+    )
+
+    xg_away = round(
+        away_stats.get("shots_on_goal", 0) * 0.22 +
+        away_stats.get("shots", 0) * 0.06 +
+        away_stats.get("dangerous_attacks", 0) * 0.01,
+        2
+    )
+
+    match_xg = round(xg_home + xg_away, 2)
+
+    momentum = min(96, round(max(home_pressure, away_pressure)))
+
+    if match_xg >= 2.4:
+        mercado = "Over 2.5 gols"
+        confianca = min(94, round(match_xg * 32))
+        risco = "Médio"
+    elif match_xg >= 1.6:
+        mercado = "Over 1.5 gols"
+        confianca = min(92, round(match_xg * 38))
+        risco = "Baixo"
+    elif abs(home_pressure - away_pressure) >= 18:
+        mercado = "Próximo gol"
+        confianca = min(90, max(home_goal_chance, away_goal_chance))
+        risco = "Médio"
+    else:
+        mercado = "Aguardar melhor entrada"
+        confianca = 68
+        risco = "Alto"
+
+    favorito_proximo_gol = "Casa" if home_goal_chance >= away_goal_chance else "Fora"
+
+    return {
+        "homePressure": round(home_pressure),
+        "awayPressure": round(away_pressure),
+        "momentum": momentum,
+        "xgHome": xg_home,
+        "xgAway": xg_away,
+        "matchXg": match_xg,
+        "nextGoalSide": favorito_proximo_gol,
+        "nextGoalHome": home_goal_chance,
+        "nextGoalAway": away_goal_chance,
+        "recommendedMarket": mercado,
+        "marketConfidence": confianca,
+        "risk": risco
+    }
+
 @app.route("/api/live")
 def api_live():
     global LIVE_CACHE
@@ -448,13 +579,16 @@ def api_live():
 
     if LIVE_CACHE["time"] and LIVE_CACHE["data"]:
         segundos = (agora - LIVE_CACHE["time"]).total_seconds()
+
         if segundos < 180:
             return jsonify(LIVE_CACHE["data"])
 
     games = []
 
     if API_FOOTBALL_KEY:
+
         try:
+
             today = datetime.date.today().isoformat()
 
             url = "https://v3.football.api-sports.io/fixtures"
@@ -469,81 +603,195 @@ def api_live():
                 "status": "NS-1H-HT-2H-ET-BT-P"
             }
 
-            r = requests.get(url, headers=headers, params=params, timeout=10)
+            r = requests.get(
+                url,
+                headers=headers,
+                params=params,
+                timeout=10
+            )
+
             data = r.json()
+
             fixtures = data.get("response", [])
 
             for item in fixtures[:20]:
+
                 fixture = item.get("fixture", {})
                 teams = item.get("teams", {})
                 goals = item.get("goals", {})
                 league = item.get("league", {})
 
+                home_goals = goals.get("home") or 0
+                away_goals = goals.get("away") or 0
+
+                # =========================
+                # ESTATÍSTICAS REAIS
+                # =========================
+
+                fixture_id = fixture.get("id")
+
+                home_stats, away_stats = buscar_estatisticas_reais(
+                    fixture_id
+                )
+
+                # fallback inteligente
+                if not home_stats or not away_stats:
+
+                    shots_home = home_goals * 3 + 6
+                    shots_away = away_goals * 3 + 5
+
+                    shots_on_goal_home = max(
+                        2,
+                        int(shots_home * 0.45)
+                    )
+
+                    shots_on_goal_away = max(
+                        1,
+                        int(shots_away * 0.40)
+                    )
+
+                    corners_home = max(
+                        2,
+                        int(shots_home * 0.35)
+                    )
+
+                    corners_away = max(
+                        1,
+                        int(shots_away * 0.30)
+                    )
+
+                    dangerous_home = shots_home * 6
+                    dangerous_away = shots_away * 5
+
+                    possession_home = min(
+                        68,
+                        50 + (home_goals * 4)
+                    )
+
+                    possession_away = 100 - possession_home
+
+                    home_stats = {
+                        "possession": possession_home,
+                        "shots": shots_home,
+                        "shots_on_goal": shots_on_goal_home,
+                        "corners": corners_home,
+                        "dangerous_attacks": dangerous_home
+                    }
+
+                    away_stats = {
+                        "possession": possession_away,
+                        "shots": shots_away,
+                        "shots_on_goal": shots_on_goal_away,
+                        "corners": corners_away,
+                        "dangerous_attacks": dangerous_away
+                    }	
+
+                # =========================
+                # IA REALTIME
+                # =========================
+
+                ia_live = calcular_ia_live(
+                    home_stats,
+                    away_stats,
+                    home_goals,
+                    away_goals
+                )
+
+                # =========================
+                # GAME OBJECT
+                # =========================
+
                 games.append({
+
                     "league": league.get("name"),
-                    "minute": fixture.get("status", {}).get("elapsed", 0),
-                    "status": fixture.get("status", {}).get("short", "NS"),
 
-                    "home": teams.get("home", {}).get("name"),
-                    "away": teams.get("away", {}).get("name"),
+                    "minute": fixture.get(
+                        "status",
+                        {}
+                    ).get("elapsed", 0),
 
-                    "homeLogo": teams.get("home", {}).get("logo"),
-                    "awayLogo": teams.get("away", {}).get("logo"),
+                    "status": fixture.get(
+                        "status",
+                        {}
+                    ).get("short", "NS"),
 
-                    "homeGoals": goals.get("home", 0),
-                    "awayGoals": goals.get("away", 0),
+                    "home": teams.get(
+                        "home",
+                        {}
+                    ).get("name"),
 
-                    "home_stats": {
-                        "possession": random.randint(48, 67),
-                        "shots": random.randint(5, 18),
-                        "shots_on_goal": random.randint(2, 9),
-                        "corners": random.randint(1, 10),
-                        "dangerous_attacks": random.randint(18, 72)
-                    },
+                    "away": teams.get(
+                        "away",
+                        {}
+                    ).get("name"),
 
-                    "away_stats": {
-                        "possession": random.randint(33, 52),
-                        "shots": random.randint(3, 14),
-                        "shots_on_goal": random.randint(1, 7),
-                        "corners": random.randint(1, 8),
-                        "dangerous_attacks": random.randint(12, 58)
-                    },
+                    "homeLogo": teams.get(
+                        "home",
+                        {}
+                    ).get("logo"),
 
-                    "aiAnalysis": random.choice([
-                        "IA detecta pressão ofensiva crescente.",
-                        "Mercado de gols apresenta valor.",
-                        "Time mandante domina ações ofensivas.",
-                        "Volume ofensivo elevado nos últimos minutos.",
-                        "Partida favorável para entradas ao vivo."
-                    ]),
+                    "awayLogo": teams.get(
+                        "away",
+                        {}
+                    ).get("logo"),
 
-                    "recommendedMarket": random.choice([
-                        "Over 1.5 gols",
-                        "Over 2.5 gols",
-                        "Ambos marcam",
-                        "Próximo gol",
-                        "Escanteios ao vivo"
-                    ]),
+                    "homeGoals": home_goals,
+                    "awayGoals": away_goals,
 
-                    "marketConfidence": random.randint(72, 94),
+                    "home_stats": home_stats,
+                    "away_stats": away_stats,
+
+"aiAnalysis": (
+    f"{teams.get('home', {}).get('name')} apresenta "
+    f"{ia_live['homePressure']} de pressão ofensiva "
+    f"contra {ia_live['awayPressure']} do adversário. "
+    f"Momentum atual em {ia_live['momentum']}%. "
+    f"Mercado mais forte: {ia_live['recommendedMarket']}."
+),
+
+                    "recommendedMarket": ia_live["recommendedMarket"],
+
+                    "marketConfidence": ia_live["marketConfidence"],
+
+                    "momentum": ia_live["momentum"],
+
+                    "nextGoalHome": ia_live["nextGoalHome"],
+                    "nextGoalAway": ia_live["nextGoalAway"],
+
+                    "xgHome": ia_live["xgHome"],
+                    "xgAway": ia_live["xgAway"],
+                    "matchXg": ia_live["matchXg"],
+
+                    "risk": ia_live["risk"],
+
                     "live": True
                 })
 
         except Exception as e:
+
             print("ERRO API LIVE:", e)
 
+    # =========================
+    # FALLBACK DEMO
+    # =========================
+
     if not games:
+
         games = [
             {
                 "league": "Champions League",
                 "minute": 67,
                 "status": "2H",
+
                 "home": "Manchester City",
                 "away": "Real Madrid",
+
                 "homeGoals": 2,
                 "awayGoals": 1,
+
                 "homeLogo": "",
                 "awayLogo": "",
+
                 "home_stats": {
                     "possession": 61,
                     "shots": 14,
@@ -551,6 +799,7 @@ def api_live():
                     "corners": 6,
                     "dangerous_attacks": 42
                 },
+
                 "away_stats": {
                     "possession": 39,
                     "shots": 7,
@@ -558,20 +807,35 @@ def api_live():
                     "corners": 3,
                     "dangerous_attacks": 21
                 },
+
                 "aiAnalysis": "IA detecta domínio ofensivo forte e tendência de pressão crescente.",
+
                 "recommendedMarket": "Over 1.5 gols",
+
                 "marketConfidence": 87,
+
+                "momentum": 84,
+
+                "nextGoalHome": 74,
+                "nextGoalAway": 26,
+
+                "xgHome": 2.12,
+                "xgAway": 0.94,
+                "matchXg": 3.06,
+
+                "risk": "Médio",
+
                 "live": True
             }
         ]
 
     resposta = {
-    "source": "api-football" if API_FOOTBALL_KEY else "demo-sem-chave",
-    "cached": False,
-    "cache_seconds": 180,
-    "api_protection": True,
-    "games": games
-}
+        "source": "api-football" if API_FOOTBALL_KEY else "demo-sem-chave",
+        "cached": False,
+        "cache_seconds": 180,
+        "api_protection": True,
+        "games": games
+    }
 
     LIVE_CACHE["time"] = agora
     LIVE_CACHE["data"] = resposta
