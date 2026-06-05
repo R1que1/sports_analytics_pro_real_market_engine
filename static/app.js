@@ -177,7 +177,17 @@ function rotateAIMessages(){
     const box = document.getElementById("premiumOpportunity");
     if(!box) return;
 
-    const msg = aiMessages[Math.floor(Math.random() * aiMessages.length)];
+    const melhorJogo = games.sort(
+    (a, b) => b.marketConfidence - a.marketConfidence
+)[0];
+
+const msg =
+    melhorJogo.home +
+    " x " +
+    melhorJogo.away +
+    " com " +
+    melhorJogo.marketConfidence +
+    "% de confiança IA";
 
 const momentumIA = game.momentum || 84;
     box.innerHTML = `
@@ -270,7 +280,20 @@ function loadSignalCenter(){
         }
     ];
 
-    const s = signals[Math.floor(Math.random() * signals.length)];
+    const melhor = window.liveGames && window.liveGames.length
+    ? [...window.liveGames].sort((a, b) => b.marketConfidence - a.marketConfidence)[0]
+    : null;
+
+const s = melhor ? {
+    jogo: `${melhor.home} x ${melhor.away}`,
+    mercado: melhor.recommendedMarket || "Mercado em análise",
+    confianca: melhor.marketConfidence || 78,
+    odd: "analisando",
+    oddJusta: "IA",
+    value: `+${Math.max(8, Math.round((melhor.marketConfidence || 78) / 6))}%`,
+    risco: melhor.risk || "Médio",
+    decisao: melhor.marketConfidence >= 88 ? "ENTRADA PREMIUM" : "SINAL FORTE"
+} : signals[Math.floor(Math.random() * signals.length)];
 
     box.innerHTML = `
         <div class="signal-premium-card">
@@ -301,3 +324,6 @@ function loadSignalCenter(){
 
 loadSignalCenter();
 setInterval(loadSignalCenter, 7000);
+
+// rotateAIMessages desativado porque o card agora é controlado pela Central de Sinais IA
+// setInterval(rotateAIMessages, 3500);
