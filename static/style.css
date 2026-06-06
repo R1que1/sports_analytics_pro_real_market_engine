@@ -3079,3 +3079,36 @@ LIVE CENTER ULTRA PREMIUM
         opacity:0;
     }
 }
+
+.market-danger{
+    color:#ff4d6d;
+    text-shadow:0 0 12px rgba(255,77,109,.7);
+}
+
+.market-hot{
+    color:#00ffb3;
+    text-shadow:0 0 12px rgba(0,255,179,.7);
+}
+
+.market-medium{
+    color:#ffd166;
+}
+
+.momentum-danger{
+    background:#ff4d6d !important;
+    box-shadow:0 0 18px rgba(255,77,109,.8);
+}
+
+.momentum-hot{
+    background:#00ffb3 !important;
+    box-shadow:0 0 18px rgba(0,255,179,.8);
+}
+
+.momentum-medium{
+    background:#ffd166 !important;
+}
+
+.danger-text{
+    color:#ff4d6d;
+    text-shadow:0 0 10px rgba(255,77,109,.7);
+}

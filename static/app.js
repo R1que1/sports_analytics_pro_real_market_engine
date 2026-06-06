@@ -66,12 +66,37 @@ function loadDashboardHeatmap(){
 
     if(!heatmap) return;
 
-    const intensidadesReaisSimuladas = [
-        92, 78, 65, 84, 71, 88,
-        55, 69, 73, 91, 80, 62,
-        47, 58, 76, 89, 94, 67,
-        52, 61, 70, 83, 86, 75
-    ];
+const base = Math.floor(Math.random() * 20) + 65;
+
+const intensidadesReaisSimuladas = [
+    base + 12,
+    base - 5,
+    base - 12,
+    base + 4,
+    base - 8,
+    base + 9,
+
+    base - 15,
+    base - 3,
+    base + 2,
+    base + 14,
+    base + 7,
+    base - 9,
+
+    base - 18,
+    base - 10,
+    base + 5,
+    base + 16,
+    base + 20,
+    base + 1,
+
+    base - 14,
+    base - 6,
+    base + 3,
+    base + 11,
+    base + 15,
+    base + 6
+];
 
     let html = "";
 
@@ -189,7 +214,7 @@ const msg =
     melhorJogo.marketConfidence +
     "% de confiança IA";
 
-const momentumIA = game.momentum || 84;
+const momentumIA = melhor?.momentum || 84;
     box.innerHTML = `
         <h3 class="ai-live-text">${msg}</h3>
         <p class="muted">Engine IA ativa cruzando estatísticas, odds e momentum.</p>
@@ -201,7 +226,16 @@ const momentumIA = game.momentum || 84;
             </div>
 
             <div class="momentum-bar">
-                <div class="momentum-fill" style="width:${momentumIA}%"></div>
+                <div 
+    class="momentum-fill ${
+        momentumIA >= 90
+            ? 'momentum-danger'
+            : momentumIA >= 80
+            ? 'momentum-hot'
+            : 'momentum-medium'
+    }"
+    style="width:${momentumIA}%">
+</div>
             </div>
         </div>
     `;
@@ -288,39 +322,99 @@ const s = melhor ? {
     jogo: `${melhor.home} x ${melhor.away}`,
     mercado: melhor.recommendedMarket || "Mercado em análise",
     confianca: melhor.marketConfidence || 78,
+    momentum: melhor.momentum || 84,
     odd: "analisando",
     oddJusta: "IA",
     value: `+${Math.max(8, Math.round((melhor.marketConfidence || 78) / 6))}%`,
     risco: melhor.risk || "Médio",
-    decisao: melhor.marketConfidence >= 88 ? "ENTRADA PREMIUM" : "SINAL FORTE"
+    decisao:
+    melhor.marketConfidence >= 92
+        ? "🚨 GOL IMINENTE"
+        : melhor.marketConfidence >= 88
+        ? "🔥 ENTRADA PREMIUM"
+        : melhor.marketConfidence >= 80
+        ? "⚡ OPORTUNIDADE FORTE"
+        : "📈 MERCADO EM OBSERVAÇÃO"
 } : signals[Math.floor(Math.random() * signals.length)];
 
     box.innerHTML = `
-        <div class="signal-premium-card">
-            <div class="signal-top">
-                <span class="signal-badge">🧠 ${s.decisao}</span>
-                <span class="signal-live">● LIVE</span>
-            </div>
+        <div class="signal-premium-card ${
+    s.confianca >= 92
+        ? 'signal-card-danger'
+        : s.confianca >= 88
+        ? 'signal-card-hot'
+        : ''
+}">
+<div class="signal-top">
+    <span class="signal-badge">🧠 ${s.decisao}</span>
+    <span class="signal-live">● LIVE</span>
 
+    ${
+        s.confianca >= 92
+            ? `<div class="goal-alert-live">
+                🚨 IA detecta chance alta de gol nos próximos minutos
+               </div>`
+            : ""
+    }
+</div>
             <h3>${s.jogo}</h3>
             <p class="muted">Mercado recomendado pela IA</p>
 
-            <div class="signal-market">${s.mercado}</div>
+            <div class="signal-market ${
+    s.confianca >= 92
+        ? 'market-danger'
+        : s.confianca >= 88
+        ? 'market-hot'
+        : 'market-medium'
+}">
+    ${s.mercado}
+</div>
 
-            <div class="signal-grid">
-                <div><small>Confiança</small><b>${s.confianca}%</b></div>
-                <div><small>Odd atual</small><b>${s.odd}</b></div>
-                <div><small>Odd justa IA</small><b>${s.oddJusta}</b></div>
-                <div><small>Value</small><b class="green-text">${s.value}</b></div>
-                <div><small>Risco</small><b>${s.risco}</b></div>
-            </div>
+    <div class="signal-grid">
+    <div><small>Confiança</small><b>${s.confianca}%</b></div>
+    <div><small>Odd atual</small><b>${s.odd}</b></div>
+    <div><small>Odd justa IA</small><b>${s.oddJusta}</b></div>
+    <div><small>Value</small><b class="green-text">${s.value}</b></div>
+    <div><small>Risco</small><b>${s.risco}</b></div>
 
+    <div>
+        <small>Momentum IA</small>
+        <b class="${
+            s.momentum >= 90
+                ? 'danger-text'
+                : s.momentum >= 80
+                ? 'green-text'
+                : ''
+        }">
+            ${s.momentum}%
+        </b>
+    </div>
+</div>
+                  
             <button class="btn small-btn" onclick="alert('Entrada salva no histórico IA')">
                 Salvar entrada
             </button>
         </div>
     `;
 }
+
+async function carregarLiveGamesParaIA(){
+    try{
+        const res = await fetch("/api/live");
+        const data = await res.json();
+
+        window.liveGames = data.games || [];
+
+        loadSignalCenter();
+
+    }catch(e){
+        console.log("Erro ao carregar jogos live para IA:", e);
+    }
+}
+
+carregarLiveGamesParaIA();
+setInterval(carregarLiveGamesParaIA, 15000);
+
 
 loadSignalCenter();
 setInterval(loadSignalCenter, 7000);

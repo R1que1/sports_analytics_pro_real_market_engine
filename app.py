@@ -752,8 +752,25 @@ def api_live():
                     "recommendedMarket": ia_live["recommendedMarket"],
 
                     "marketConfidence": ia_live["marketConfidence"],
+                    
+                     minuto = fixture.get("status", {}).get("elapsed") or 0
 
-                    "momentum": ia_live["momentum"],
+                        boost_final = 0
+
+                     if minuto >= 70:
+                         boost_final = 8
+
+                     if minuto >= 80:
+                         boost_final = 15
+
+                     if minuto >= 88:
+                         boost_final = 22
+
+
+                    "momentum": min(
+                        100,
+                        ia_live["momentum"] + boost_final
+                    ),
 
                     "nextGoalHome": ia_live["nextGoalHome"],
                     "nextGoalAway": ia_live["nextGoalAway"],
